@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:radial-gradient(ellipse at center,#45C3F5 0%,#0A7DB5 100%); padding:24px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+.label { font-family:'Quicksand',sans-serif; font-size:10px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+.group { display:flex; flex-direction:column; align-items:center; }
+.icon-btn {
+  width:52px; height:52px; border-radius:50%; background:#F7941D;
+  border:none; box-shadow:0 4px 0 rgba(0,0,0,0.25);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+}
+.icon-btn svg { width:24px; height:24px; fill:none; stroke:#fff; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+.icon-btn.lg { width:64px; height:64px; }
+.icon-btn.lg svg { width:30px; height:30px; }
+/* play icon has fill */
+.icon-btn .play { fill:#fff; stroke:none; }
+</style>
+</head><body>
+<div class="group">
+  <div class="label">Replay</div>
+  <div class="icon-btn">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="1 4 1 10 7 10"/>
+      <path d="M3.51 15a9 9 0 1 0 .49-3.27"/>
+    </svg>
+  </div>
+</div>
+<div class="group">
+  <div class="label">Skip / Next</div>
+  <div class="icon-btn">
+    <svg viewBox="0 0 24 24"><polygon class="play" points="5,3 19,12 5,21"/><line x1="19" y1="3" x2="19" y2="21" stroke="#fff" stroke-width="2.5"/></svg>
+  </div>
+</div>
+<div class="group">
+  <div class="label">Play (in CTA)</div>
+  <div class="icon-btn lg">
+    <svg viewBox="0 0 24 24"><polygon class="play" points="6,3 20,12 6,21"/></svg>
+  </div>
+</div>
+<div class="group">
+  <div class="label">Sound / Audio</div>
+  <div class="icon-btn">
+    <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+  </div>
+</div>
+</body></html>

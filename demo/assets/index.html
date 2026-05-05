@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hattim's World</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue-300: #45C3F5;
+      --blue-500: #0A7DB5;
+      --orange-400: #F7941D;
+      --orange-300: #F9A94C;
+      --white: #ffffff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* ── Shared screen base ── */
+    .screen {
+      position: absolute; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── Shared orange pill button ── */
+    .pill-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--orange-400);
+      border: none;
+      border-radius: 60px;
+      padding: 16px 48px 16px 56px;
+      cursor: pointer;
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(20px, 2.4vw, 32px);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      box-shadow: 0 6px 0 #c4700f, 0 10px 28px rgba(0,0,0,0.25);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pill-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -75%;
+      width: 50%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.45s ease;
+    }
+
+    .pill-btn:hover::before { left: 140%; }
+    .pill-btn:hover {
+      background: var(--orange-300);
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 #c4700f, 0 14px 32px rgba(0,0,0,0.28);
+    }
+    .pill-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #c4700f, 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .btn-arrow {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════
+       SCREEN 1 — EGGS / TAP
+    ══════════════════════════════ */
+    #screen-tap {
+      background: radial-gradient(ellipse at 50% 45%, var(--blue-300) 0%, var(--blue-500) 100%);
+      gap: 40px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    #screen-tap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none;
+    }
+
+    .eggs-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: clamp(16px, 4vw, 48px);
+      position: relative; z-index: 1;
+    }
+
+    .egg-wrap img {
+      width: clamp(100px, 13vw, 170px);
+      height: auto;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+    }
+
+    .egg-wrap:nth-child(1) img { animation: wiggle 2.0s ease-in-out infinite 0s; }
+    .egg-wrap:nth-child(2) img { animation: wiggle 2.4s ease-in-out infinite 0.35s; }
+    .egg-wrap:nth-child(3) img { animation: wiggle 2.1s ease-in-out infinite 0.7s; }
+
+    @keyframes wiggle {
+      0%,100% { transform: rotate(-6deg) translateY(0); }
+      25%      { transform: rotate(6deg)  translateY(-10px); }
+      50%      { transform: rotate(-3deg) translateY(0); }
+      75%      { transform: rotate(5deg)  translateY(-6px); }
+    }
+
+    .tap-hint {
+      font-family: 'Quicksand', sans-serif;
+      font-size: clamp(16px, 1.8vw, 24px);
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      animation: pulse 1.8s ease-in-out infinite;
+      position: relative; z-index: 1;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 0.4; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.05); }
+    }
+
+    /* ══════════════════════════════
+       SCREEN 2 — LOGO + HATTIM
+    ══════════════════════════════ */
+    #screen-main {
+      background: radial-gradient(ellipse at 50% 45%, var(--blue-300) 0%, var(--blue-500) 100%);
+      z-index: 8;
+    }
+
+    #screen-main::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none;
+    }
+
+    .hero-stack {
+      position: relative;
+      width: min(64vw, 800px);
+      margin-top: 14vh;
+    }
+
+    .wordmark-wrap {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(-28px) scale(0.95);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.9s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .wordmark-wrap.drop-in {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .wordmark-wrap img {
+      width: 100%; height: auto;
+      display: block;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+    }
+
+    .hattim-intro-wrap {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .hattim-intro-wrap.visible { opacity: 1; }
+
+    .hattim-intro-wrap video {
+      width: 100%; height: auto;
+      display: block;
+    }
+
+    #btnWrap {
+      margin-top: -18vh;
+      margin-bottom: 12vh;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      pointer-events: none;
+      position: relative; z-index: 5;
+    }
+
+    #btnWrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .copyright {
+      position: absolute;
+      bottom: 16px; left: 0; width: 100%;
+      text-align: center;
+      font-family: 'Quicksand', sans-serif;
+      font-size: clamp(11px, 1.1vw, 14px);
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* ══════════════════════════════
+       SCREEN 3 — STORY VIDEO
+    ══════════════════════════════ */
+    #screen-video {
+      background: #000;
+      z-index: 9;
+    }
+
+    #storyVideo {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Replay + Next buttons overlay */
+    #video-btns {
+      position: absolute;
+      bottom: 8vh;
+      left: 0; width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      pointer-events: none;
+    }
+
+    #video-btns.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .circle-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .circle-btn .circle {
+      width: clamp(64px, 7vw, 88px);
+      height: clamp(64px, 7vw, 88px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 32%, #FFA040, #F7941D 55%, #C4700F);
+      box-shadow: 0 5px 0 #8B4A00, 0 8px 20px rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .circle-btn:hover .circle {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 0 #8B4A00, 0 12px 24px rgba(0,0,0,0.35);
+    }
+
+    .circle-btn:active .circle {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #8B4A00, 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .circle-btn .circle svg {
+      width: 44px; height: 44px;
+    }
+
+    .circle-btn .lbl {
+      font-family: 'Quicksand', sans-serif;
+      font-size: clamp(13px, 1.3vw, 17px);
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════
+       SCREEN 4 — LESSON ONE
+    ══════════════════════════════ */
+    #screen-lesson1 {
+      background-image: url('gameplay_background_center.png');
+      background-size: cover;
+      background-position: center;
+      z-index: 7;
+      justify-content: flex-start;
+      padding-top: 4vh;
+      gap: 0;
+    }
+
+    .lesson-wordart {
+      width: min(58vw, 700px);
+      height: auto;
+      opacity: 0;
+      transform: translateY(-30px) scale(0.95);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.8s cubic-bezier(0.22,1,0.36,1);
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2));
+    }
+
+    .lesson-wordart.drop-in {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .hattim-lesson-wrap {
+      width: min(34vw, 420px);
+      height: auto;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      margin-top: -2vh;
+    }
+
+    .hattim-lesson-wrap.visible { opacity: 1; }
+
+    .hattim-lesson-wrap video {
+      width: 100%; height: auto;
+      display: block;
+    }
+
+    #btnLesson {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      pointer-events: none;
+      margin-top: 2vh;
+    }
+
+    #btnLesson.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    /* ── Hand pointer hint ── */
+    #hand-hint {
+      position: absolute;
+      bottom: calc(8vh + 80px);
+      left: 50%;
+      transform: translateX(-50%) translateX(140px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 20;
+    }
+
+    #hand-hint.visible { opacity: 1; }
+
+    .hand-svg {
+      width: 52px; height: 52px;
+      animation: handBounce 1s ease-in-out infinite;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    }
+
+    @keyframes handBounce {
+      0%,100% { transform: translateY(0) rotate(-20deg); }
+      50%      { transform: translateY(-10px) rotate(-20deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SCREEN 1: Eggs / Tap ── -->
+  <div class="screen active" id="screen-tap">
+    <div class="eggs-row">
+      <div class="egg-wrap"><img src="egg_cracked.png" alt="cracked egg" /></div>
+      <div class="egg-wrap"><img src="egg_pink.png"    alt="pink egg" /></div>
+      <div class="egg-wrap"><img src="egg_green.png"   alt="green egg" /></div>
+    </div>
+    <span class="tap-hint">✨ Tap to Begin ✨</span>
+  </div>
+
+  <!-- ── SCREEN 2: Logo + Hattim + Start ── -->
+  <div class="screen" id="screen-main">
+    <div class="hero-stack">
+      <div class="wordmark-wrap" id="wordmark">
+        <img src="wordmark_transparent.png" alt="Hattim's World" />
+      </div>
+      <div class="hattim-intro-wrap" id="hattimIntroWrap">
+        <video id="hattimIntroVideo" src="anim-pointing.webm" muted playsinline preload="auto"></video>
+      </div>
+    </div>
+    <div id="btnWrap">
+      <button class="pill-btn" id="btnStart">
+        START <span class="btn-arrow">→</span>
+      </button>
+    </div>
+    <p class="copyright">© Hattim's World 2026</p>
+  </div>
+
+  <!-- ── SCREEN 3: Story Video ── -->
+  <div class="screen" id="screen-video">
+    <video id="storyVideo" src="hattim_intro_anim_v04.mp4" playsinline preload="auto"></video>
+    <div id="video-btns">
+      <button class="circle-btn" id="btnReplay">
+        <div class="circle">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V2L8 6l4 4V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" fill="white"/>
+          </svg>
+        </div>
+        <span class="lbl">Replay</span>
+      </button>
+      <button class="circle-btn" id="btnNext">
+        <div class="circle">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z" fill="white"/>
+          </svg>
+        </div>
+        <span class="lbl">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 4: Lesson One ── -->
+  <div class="screen" id="screen-lesson1">
+    <img class="lesson-wordart" id="lessonWordart" src="lesson_one_transparent.png" alt="Lesson One" />
+    <div class="hattim-lesson-wrap" id="hattimLessonWrap">
+      <video id="hattimWaveVideo" src="Hattim_Wave.webm" muted playsinline loop preload="auto"></video>
+    </div>
+    <button class="pill-btn" id="btnLesson">
+      HATTIM WANTS TO MEET YOU <span class="btn-arrow">→</span>
+    </button>
+    <div id="hand-hint">
+      <svg class="hand-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="32" cy="58" rx="12" ry="4" fill="rgba(0,0,0,0.15)"/>
+        <path d="M20 28c0-2.2 1.8-4 4-4s4 1.8 4 4v-8c0-2.2 1.8-4 4-4s4 1.8 4 4v-2c0-2.2 1.8-4 4-4s4 1.8 4 4v14l2-3c1-2 3.5-2.5 5-1s1 4-0.5 5.5L44 46c-1.5 2-4 4-8 4s-8-2-10-6l-4-8c-1-2-0.5-4.5 1-5.5s3.5-0.5 4.5 1l2.5 4V28z" fill="white" stroke="#F7941D" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
+
+<!-- Audio -->
+<audio id="introMusic"    src="Music_2_kids.mp3" preload="auto"></audio>
+<audio id="gameplayMusic" src="Happy_background_music_for_kids_videos_and_children_games_Apps.mp3" preload="auto" loop></audio>
+<audio id="clickSfx"      src="BUtton_Click_3_-_SFX_Producer.mp3" preload="auto"></audio>
+
+<script>
+  // ── Elements ──
+  const screenTap     = document.getElementById('screen-tap');
+  const screenMain    = document.getElementById('screen-main');
+  const screenVideo   = document.getElementById('screen-video');
+  const screenLesson1 = document.getElementById('screen-lesson1');
+
+  const wordmark         = document.getElementById('wordmark');
+  const hattimIntroWrap  = document.getElementById('hattimIntroWrap');
+  const hattimIntroVideo = document.getElementById('hattimIntroVideo');
+  const btnWrap          = document.getElementById('btnWrap');
+  const btnStart         = document.getElementById('btnStart');
+
+  const storyVideo  = document.getElementById('storyVideo');
+  const videoBtns   = document.getElementById('video-btns');
+  const btnReplay   = document.getElementById('btnReplay');
+  const btnNext     = document.getElementById('btnNext');
+
+  const lessonWordart    = document.getElementById('lessonWordart');
+  const hattimLessonWrap = document.getElementById('hattimLessonWrap');
+  const hattimWaveVideo   = document.getElementById('hattimWaveVideo');
+  const btnLesson        = document.getElementById('btnLesson');
+  const handHint         = document.getElementById('hand-hint');
+
+  const introMusic    = document.getElementById('introMusic');
+  const gameplayMusic = document.getElementById('gameplayMusic');
+  const clickSfx      = document.getElementById('clickSfx');
+
+  // ── Helpers ──
+  function showScreen(el) {
+    el.classList.add('active');
+  }
+
+  function hideScreen(el) {
+    el.classList.remove('active');
+  }
+
+  function playClick() {
+    clickSfx.currentTime = 0;
+    clickSfx.play().catch(() => {});
+  }
+
+  function fadeOut(audioEl, durationMs, cb) {
+    const steps = 40;
+    const interval = durationMs / steps;
+    const startVol = audioEl.volume;
+    let step = 0;
+    const timer = setInterval(() => {
+      step++;
+      audioEl.volume = Math.max(0, startVol * (1 - step / steps));
+      if (step >= steps) {
+        clearInterval(timer);
+        audioEl.pause();
+        audioEl.volume = 0;
+        if (cb) cb();
+      }
+    }, interval);
+  }
+
+  function fadeIn(audioEl, targetVol, durationMs) {
+    audioEl.volume = 0;
+    audioEl.play().catch(() => {});
+    const steps = 40;
+    const interval = durationMs / steps;
+    let step = 0;
+    const timer = setInterval(() => {
+      step++;
+      audioEl.volume = Math.min(targetVol, targetVol * (step / steps));
+      if (step >= steps) clearInterval(timer);
+    }, interval);
+  }
+
+  // ══════════════════════════════
+  // SCREEN 1 → SCREEN 2
+  // ══════════════════════════════
+  screenTap.addEventListener('click', () => {
+    fadeIn(introMusic, 0.85, 800);
+    hideScreen(screenTap);
+
+    setTimeout(() => {
+      showScreen(screenMain);
+      setTimeout(() => {
+        wordmark.classList.add('drop-in');
+        setTimeout(() => {
+          hattimIntroWrap.classList.add('visible');
+          hattimIntroVideo.play().catch(() => {});
+        }, 800);
+      }, 150);
+    }, 600);
+  }, { once: true });
+
+  // Intro anim ends → show Start button, fade music
+  hattimIntroVideo.addEventListener('ended', () => {
+    hattimIntroVideo.currentTime = hattimIntroVideo.duration - 0.01;
+    hattimIntroVideo.pause();
+    btnWrap.classList.add('visible');
+    fadeOut(introMusic, 3000);
+  });
+
+  // Fallback
+  setTimeout(() => {
+    if (!btnWrap.classList.contains('visible')) {
+      btnWrap.classList.add('visible');
+      fadeOut(introMusic, 3000);
+    }
+  }, 30000);
+
+  // ══════════════════════════════
+  // SCREEN 2 → SCREEN 3 (video)
+  // ══════════════════════════════
+  btnStart.addEventListener('click', () => {
+    playClick();
+    hideScreen(screenMain);
+
+    setTimeout(() => {
+      showScreen(screenVideo);
+      storyVideo.currentTime = 0;
+      storyVideo.play().catch(() => {});
+    }, 500);
+  });
+
+  // Video ends → show replay/next buttons
+  storyVideo.addEventListener('ended', () => {
+    storyVideo.pause();
+    videoBtns.classList.add('visible');
+  });
+
+  // Replay
+  btnReplay.addEventListener('click', () => {
+    playClick();
+    videoBtns.classList.remove('visible');
+    storyVideo.currentTime = 0;
+    storyVideo.play().catch(() => {});
+  });
+
+  // ══════════════════════════════
+  // SCREEN 3 → SCREEN 4 (lesson 1)
+  // ══════════════════════════════
+  btnNext.addEventListener('click', () => {
+    playClick();
+    hideScreen(screenVideo);
+
+    setTimeout(() => {
+      showScreen(screenLesson1);
+      fadeIn(gameplayMusic, 0.35, 1500);
+
+      setTimeout(() => {
+        lessonWordart.classList.add('drop-in');
+
+        setTimeout(() => {
+          hattimLessonWrap.classList.add('visible');
+          hattimWaveVideo.play().catch(() => {});
+
+          setTimeout(() => {
+            btnLesson.classList.add('visible');
+
+            // Hand hint after 12 seconds of no click
+            let handTimer = setTimeout(() => {
+              handHint.classList.add('visible');
+            }, 12000);
+
+            btnLesson.addEventListener('click', () => {
+              clearTimeout(handTimer);
+              handHint.classList.remove('visible');
+              playClick();
+              // TODO: next lesson screen
+            }, { once: true });
+
+          }, 800);
+        }, 700);
+      }, 200);
+    }, 600);
+  });
+
+</script>
+</body>
+</html>

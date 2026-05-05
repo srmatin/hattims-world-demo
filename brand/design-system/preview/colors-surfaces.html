@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Quicksand',sans-serif; background:#f4f4f4; padding:16px; }
+.grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.swatch { border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+.color { height:64px; }
+.label { background:#fff; padding:6px 8px; }
+.name { font-size:11px; font-weight:700; color:#333; }
+.hex  { font-size:10px; color:#888; margin-top:1px; }
+.section-title { font-size:11px; font-weight:700; color:#555; letter-spacing:0.08em; text-transform:uppercase; margin:12px 0 6px; }
+</style>
+</head><body>
+<div class="section-title">Greens</div>
+<div class="grid">
+  <div class="swatch"><div class="color" style="background:#D4EDBA"></div><div class="label"><div class="name">Green 100</div><div class="hex">#D4EDBA</div></div></div>
+  <div class="swatch"><div class="color" style="background:#8CB84A"></div><div class="label"><div class="name">Green 300</div><div class="hex">#8CB84A</div></div></div>
+  <div class="swatch"><div class="color" style="background:#7BC044"></div><div class="label"><div class="name">Green 400 ★</div><div class="hex">#7BC044</div><div class="hex" style="color:#5A9C2A;font-weight:700">✓ Correct state</div></div></div>
+  <div class="swatch"><div class="color" style="background:#3E8C10"></div><div class="label"><div class="name">Green 600</div><div class="hex">#3E8C10</div><div class="hex" style="color:#5A9C2A;font-weight:700">✓ Correct state dark</div></div></div>
+</div>
+<div class="section-title">Red / Wrong state</div>
+<div class="grid">
+  <div class="swatch"><div class="color" style="background:#F58A80"></div><div class="label"><div class="name">Red 300</div><div class="hex">#F58A80</div></div></div>
+  <div class="swatch"><div class="color" style="background:#E8392A"></div><div class="label"><div class="name">Red 400 ★</div><div class="hex">#E8392A</div></div></div>
+  <div class="swatch"><div class="color" style="background:#C82010"></div><div class="label"><div class="name">Red 500</div><div class="hex">#C82010</div></div></div>
+</div>
+<div class="section-title">Purple / Movie Time</div>
+<div class="grid">
+  <div class="swatch"><div class="color" style="background:#B07FD8"></div><div class="label"><div class="name">Purple 300</div><div class="hex">#B07FD8</div></div></div>
+  <div class="swatch"><div class="color" style="background:#7B4FAF"></div><div class="label"><div class="name">Purple 400 ★</div><div class="hex">#7B4FAF</div></div></div>
+</div>
+<div class="section-title">Surfaces & Neutrals</div>
+<div class="grid">
+  <div class="swatch"><div class="color" style="background:#FFFDE0"></div><div class="label"><div class="name">Cream (Game)</div><div class="hex">#FFFDE0</div></div></div>
+  <div class="swatch"><div class="color" style="background:#E8C9A0"></div><div class="label"><div class="name">Tan (Wood)</div><div class="hex">#E8C9A0</div></div></div>
+  <div class="swatch"><div class="color" style="background:#FFFFFF; border:1px solid #eee"></div><div class="label"><div class="name">White (Cards)</div><div class="hex">#FFFFFF</div></div></div>
+</div>
+</body></html>

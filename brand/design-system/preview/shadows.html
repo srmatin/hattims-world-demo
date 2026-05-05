@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f0f4f8; padding:16px; font-family:'Quicksand',sans-serif; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.card { background:#fff; border-radius:10px; padding:14px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.label { font-size:10px; font-weight:700; color:#888; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:10px; }
+.demo { margin-bottom:6px; }
+.shadow-text { font-family:'Quicksand',sans-serif; font-size:11px; color:#666; margin-top:4px; }
+</style>
+</head><body>
+<div class="grid">
+  <div class="card">
+    <div class="label">shadow-button</div>
+    <div class="demo">
+      <div style="display:inline-block;background:#F7941D;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:10px 24px;border-radius:50px;box-shadow:0 4px 0 rgba(0,0,0,0.25)">NEXT</div>
+    </div>
+    <div class="shadow-text">0 4px 0 rgba(0,0,0,0.25)</div>
+  </div>
+  <div class="card">
+    <div class="label">shadow-card</div>
+    <div class="demo">
+      <div style="width:60px;height:60px;border-radius:16px;background:#fff;border:3px solid #F7941D;box-shadow:0 4px 12px rgba(0,0,0,0.15)"></div>
+    </div>
+    <div class="shadow-text">0 4px 12px rgba(0,0,0,0.15)</div>
+  </div>
+  <div class="card">
+    <div class="label">shadow-raised</div>
+    <div class="demo">
+      <div style="width:80px;height:40px;border-radius:12px;background:#29ABE2;box-shadow:0 8px 24px rgba(0,0,0,0.20)"></div>
+    </div>
+    <div class="shadow-text">0 8px 24px rgba(0,0,0,0.20)</div>
+  </div>
+  <div class="card">
+    <div class="label">shadow-text-display</div>
+    <div class="demo" style="background:radial-gradient(ellipse,#45C3F5,#0A7DB5);border-radius:8px;padding:8px">
+      <div style="font-family:'Quicksand',sans-serif;font-size:20px;font-weight:700;color:#F9C923;text-shadow:2px 3px 0 rgba(0,60,120,0.35)">LESSON ONE</div>
+    </div>
+    <div class="shadow-text">Multi-layer offset text shadow</div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f0f4f8; padding:16px; font-family:'Quicksand',sans-serif; }
+.section { margin-bottom:16px; }
+.section-title { font-size:10px; font-weight:700; color:#888; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+.tokens { display:flex; flex-wrap:wrap; gap:6px; }
+.token { background:#fff; border-radius:8px; padding:8px 12px; box-shadow:0 1px 4px rgba(0,0,0,0.1); display:flex; align-items:center; gap:10px; }
+.vis { border-radius:4px; background:#29ABE2; flex-shrink:0; }
+.info .name { font-size:11px; font-weight:700; color:#333; }
+.info .val  { font-size:10px; color:#888; }
+</style>
+</head><body>
+
+<div class="section">
+  <div class="section-title">Spacing Scale</div>
+  <div class="tokens">
+    <div class="token"><div class="vis" style="width:4px;height:20px"></div><div class="info"><div class="name">space-1</div><div class="val">4px</div></div></div>
+    <div class="token"><div class="vis" style="width:8px;height:20px"></div><div class="info"><div class="name">space-2</div><div class="val">8px</div></div></div>
+    <div class="token"><div class="vis" style="width:12px;height:20px"></div><div class="info"><div class="name">space-3</div><div class="val">12px</div></div></div>
+    <div class="token"><div class="vis" style="width:16px;height:20px"></div><div class="info"><div class="name">space-4</div><div class="val">16px</div></div></div>
+    <div class="token"><div class="vis" style="width:24px;height:20px"></div><div class="info"><div class="name">space-6</div><div class="val">24px</div></div></div>
+    <div class="token"><div class="vis" style="width:32px;height:20px"></div><div class="info"><div class="name">space-8</div><div class="val">32px</div></div></div>
+    <div class="token"><div class="vis" style="width:40px;height:20px"></div><div class="info"><div class="name">space-10</div><div class="val">40px</div></div></div>
+    <div class="token"><div class="vis" style="width:48px;height:20px"></div><div class="info"><div class="name">space-12</div><div class="val">48px</div></div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Border Radius</div>
+  <div class="tokens">
+    <div class="token"><div class="vis" style="width:36px;height:36px;border-radius:8px"></div><div class="info"><div class="name">radius-sm</div><div class="val">8px</div></div></div>
+    <div class="token"><div class="vis" style="width:36px;height:36px;border-radius:16px"></div><div class="info"><div class="name">radius-md</div><div class="val">16px — cards</div></div></div>
+    <div class="token"><div class="vis" style="width:36px;height:36px;border-radius:24px"></div><div class="info"><div class="name">radius-lg</div><div class="val">24px</div></div></div>
+    <div class="token"><div class="vis" style="width:64px;height:36px;border-radius:50px"></div><div class="info"><div class="name">radius-pill</div><div class="val">50px — buttons</div></div></div>
+    <div class="token"><div class="vis" style="width:36px;height:36px;border-radius:9999px"></div><div class="info"><div class="name">radius-full</div><div class="val">9999px — icon btns</div></div></div>
+  </div>
+</div>
+</body></html>

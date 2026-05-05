@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+@font-face { font-family:'Quicksand'; src:url('../fonts/Quicksand-VariableFont_wght.ttf') format('truetype'); font-weight:300 700; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#fff; padding:20px; }
+.grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.pose { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.char {
+  width:200px; height:180px;
+  background: center/210% no-repeat;
+  flex-shrink:0;
+}
+.name { font-family:'Quicksand',sans-serif; font-size:10px; font-weight:700; color:#444; letter-spacing:0.08em; text-transform:uppercase; text-align:center; }
+.filename { font-family:'Quicksand',sans-serif; font-size:9px; color:#bbb; text-align:center; }
+</style>
+</head><body>
+<div class="grid">
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-idle.png')"></div>
+    <div class="name">Idle / Happy</div><div class="filename">hattim-idle.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-hi.png');background-size:185%;background-position:55% center;"></div>
+    <div class="name">Hi / Wave</div><div class="filename">hattim-hi.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-thumbsup.png')"></div>
+    <div class="name">Thumbs Up</div><div class="filename">hattim-thumbsup.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-celebration.png')"></div>
+    <div class="name">Celebration</div><div class="filename">hattim-celebration.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-eat.png')"></div>
+    <div class="name">Eat / Hungry</div><div class="filename">hattim-eat.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-confused.png')"></div>
+    <div class="name">Confused</div><div class="filename">hattim-confused.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-point.png')"></div>
+    <div class="name">Point</div><div class="filename">hattim-point.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-my.png')"></div>
+    <div class="name">My</div><div class="filename">hattim-my.png</div>
+  </div>
+  <div class="pose">
+    <div class="char" style="background-image:url('../assets/hattim-your.png')"></div>
+    <div class="name">Your</div><div class="filename">hattim-your.png</div>
+  </div>
+</div>
+</body></html>
