@@ -1,2 +1,4 @@
 .DS_Store
 *.log
+.claude/
+demo/assets/hattim_intro_anim_v04.mp4

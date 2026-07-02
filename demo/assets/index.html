@@ -325,7 +325,7 @@
       background-image: url('gameplay_background_center.png');
       background-size: cover;
       background-position: center;
-      z-index: 7;
+      z-index: 10;
       justify-content: flex-start;
       padding-top: 4vh;
       gap: 0;
@@ -378,7 +378,7 @@
     /* ── Hand pointer hint ── */
     #hand-hint {
       position: absolute;
-      bottom: calc(8vh + 80px);
+      bottom: calc(8vh + 0px);
       left: 50%;
       transform: translateX(-50%) translateX(140px);
       opacity: 0;
@@ -391,6 +391,7 @@
 
     .hand-svg {
       width: 52px; height: 52px;
+      color: white;
       animation: handBounce 1s ease-in-out infinite;
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
     }
@@ -399,6 +400,129 @@
       0%,100% { transform: translateY(0) rotate(-20deg); }
       50%      { transform: translateY(-10px) rotate(-20deg); }
     }
+
+    #btn-skip {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 40px;
+      padding: 8px 16px 8px 12px;
+      color: white;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, background 0.2s ease;
+      z-index: 20;
+    }
+    #btn-skip svg { width: 18px; height: 18px; }
+    #btn-skip.visible { opacity: 1; pointer-events: all; }
+    #btn-skip:hover { background: rgba(255,255,255,0.25); }
+
+    /* ══════════════════════════════
+       SCREEN 5 — FRIENDS
+    ══════════════════════════════ */
+    #screen-friends {
+      background-image: url('gameplay_background_center.png');
+      background-size: cover;
+      background-position: center;
+      z-index: 11;
+    }
+
+    #friends-question,
+    #teach-name-text {
+      position: absolute;
+      top: 12%;
+      left: 0;
+      width: 100%;
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(22px, 2.8vw, 38px);
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      padding: 0 24px;
+      margin: 0;
+    }
+
+    #friends-question.visible,
+    #teach-name-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .circle-pulse-btn {
+      width: 70px; height: 70px;
+      border-radius: 50%;
+      background: var(--orange-400);
+      border: none;
+      box-shadow: 0 6px 0 #c4700f, 0 10px 28px rgba(0,0,0,0.25);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+      animation: friendPulse 1.4s ease-in-out infinite;
+    }
+
+    .circle-pulse-btn { pointer-events: none; }
+    .circle-pulse-btn.visible { opacity: 1; pointer-events: all; }
+
+    .circle-pulse-btn svg { width: 36px; height: 36px; }
+
+    @keyframes friendPulse {
+      0%,100% { transform: scale(1);    box-shadow: 0 6px 0 #c4700f, 0 10px 28px rgba(0,0,0,0.25); }
+      50%      { transform: scale(1.12); box-shadow: 0 8px 0 #c4700f, 0 14px 36px rgba(0,0,0,0.3); }
+    }
+
+    /* ══════════════════════════════
+       SCREEN 6 — SENTENCE WiP
+    ══════════════════════════════ */
+    #screen-sentence {
+      background-image: url('lesson1-sentence-wip.png');
+      background-size: cover;
+      background-position: center;
+      z-index: 12;
+    }
+
+    #btn-wip {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 40px;
+      padding: 8px 20px;
+      color: white;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      z-index: 20;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    #btn-wip:hover { background: rgba(255,255,255,0.28); }
+
+    /* ── Friends screen layout overrides ── */
+    #hattimIdleWrap { width: min(74.4vw, 768px); }
+    #btnFriends, #btnPlay { position: absolute; bottom: 14%; }
+    .circle-pulse-btn svg { width: 54px; height: 54px; }
   </style>
 </head>
 <body>
@@ -433,7 +557,13 @@
 
   <!-- ── SCREEN 3: Story Video ── -->
   <div class="screen" id="screen-video">
-    <video id="storyVideo" src="hattim_intro_anim_v04.mp4" playsinline preload="auto"></video>
+    <video id="storyVideo" src="hattim_intro_anim_eng_V04.mp4" playsinline preload="auto"></video>
+    <button id="btn-skip">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <path fill="currentColor" d="M8 1C4.14 1 1 4.14 1 8s3.14 7 7 7s7-3.14 7-7s-3.14-7-7-7m0 13c-3.309 0-6-2.691-6-6s2.691-6 6-6s6 2.691 6 6s-2.691 6-6 6m2.854-8.854a.5.5 0 0 1 0 .707l-5 5a.5.5 0 0 1-.708 0a.5.5 0 0 1 0-.707l5-5a.5.5 0 0 1 .707 0z" />
+      </svg>
+      <span>Skip</span>
+    </button>
     <div id="video-btns">
       <button class="circle-btn" id="btnReplay">
         <div class="circle">
@@ -464,11 +594,39 @@
       HATTIM WANTS TO MEET YOU <span class="btn-arrow">→</span>
     </button>
     <div id="hand-hint">
-      <svg class="hand-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="32" cy="58" rx="12" ry="4" fill="rgba(0,0,0,0.15)"/>
-        <path d="M20 28c0-2.2 1.8-4 4-4s4 1.8 4 4v-8c0-2.2 1.8-4 4-4s4 1.8 4 4v-2c0-2.2 1.8-4 4-4s4 1.8 4 4v14l2-3c1-2 3.5-2.5 5-1s1 4-0.5 5.5L44 46c-1.5 2-4 4-8 4s-8-2-10-6l-4-8c-1-2-0.5-4.5 1-5.5s3.5-0.5 4.5 1l2.5 4V28z" fill="white" stroke="#F7941D" stroke-width="1.5"/>
+      <svg class="hand-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="4">
+          <path stroke-linejoin="round" d="M15 26V15a3 3 0 1 1 6 0v11" />
+          <path stroke-linejoin="round" d="M39 25v6.5C39 37.851 33.851 43 27.5 43h-1C20.149 43 15 37.851 15 31.5V25" />
+          <path stroke-linejoin="round" d="M21 29v-5a3 3 0 1 1 6 0v5m0 0v-5a3 3 0 1 1 6 0v5m0 0v-5a3 3 0 1 1 6 0v5" />
+          <path d="M28 15a9.97 9.97 0 0 0-1.959-5.945A9.99 9.99 0 0 0 18 5a9.99 9.99 0 0 0-8.042 4.055A9.97 9.97 0 0 0 8 15" />
+        </g>
       </svg>
     </div>
+  </div>
+
+  <!-- ── SCREEN 5: Friends with Hattim? ── -->
+  <div class="screen" id="screen-friends">
+    <p id="friends-question">Do you wanna be friends with Hattim?</p>
+    <p id="teach-name-text">Let's teach Hattim his name</p>
+    <div class="hattim-lesson-wrap" id="hattimIdleWrap">
+      <video id="hattimIdleVideo" src="anim-idle.webm" muted playsinline loop preload="auto"></video>
+    </div>
+    <button class="circle-pulse-btn" id="btnFriends">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <path fill="currentColor" d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59c-.125.36-.479 1.013-1.04 1.639c-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545c1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484c.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464c.201-.263.38-.578.488-.901c.11-.33.172-.762.004-1.149c.069-.13.12-.269.159-.403c.077-.27.113-.568.113-.857c0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362a1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272c-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05a9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164c-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868c-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65c1.095-.3 1.977-.996 2.614-1.708c.635-.71 1.064-1.475 1.238-1.978c.243-.7.407-1.768.482-2.85c.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725a.5.5 0 0 0 .595.644l.003-.001l.014-.003l.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164c.175.058.45.3.57.65c.107.308.087.67-.266 1.022l-.353.353l.353.354c.043.043.105.141.154.315c.048.167.075.37.075.581c0 .212-.027.414-.075.582c-.05.174-.111.272-.154.315l-.353.353l.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353l.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z" />
+      </svg>
+    </button>
+    <button class="circle-pulse-btn" id="btnPlay">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <path fill="currentColor" d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── SCREEN 6: Sentence placeholder ── -->
+  <div class="screen" id="screen-sentence">
+    <button id="btn-wip" onclick="location.reload()">Placeholder WiP</button>
   </div>
 
 <!-- Audio -->
@@ -493,6 +651,7 @@
   const videoBtns   = document.getElementById('video-btns');
   const btnReplay   = document.getElementById('btnReplay');
   const btnNext     = document.getElementById('btnNext');
+  const btnSkip     = document.getElementById('btn-skip');
 
   const lessonWordart    = document.getElementById('lessonWordart');
   const hattimLessonWrap = document.getElementById('hattimLessonWrap');
@@ -500,9 +659,20 @@
   const btnLesson        = document.getElementById('btnLesson');
   const handHint         = document.getElementById('hand-hint');
 
+  const screenFriends    = document.getElementById('screen-friends');
+  const friendsQuestion  = document.getElementById('friends-question');
+  const teachNameText    = document.getElementById('teach-name-text');
+  const hattimIdleWrap   = document.getElementById('hattimIdleWrap');
+  const hattimIdleVideo  = document.getElementById('hattimIdleVideo');
+  const btnFriends       = document.getElementById('btnFriends');
+  const btnPlay          = document.getElementById('btnPlay');
+  const screenSentence   = document.getElementById('screen-sentence');
+
   const introMusic    = document.getElementById('introMusic');
   const gameplayMusic = document.getElementById('gameplayMusic');
   const clickSfx      = document.getElementById('clickSfx');
+
+  let handTimer = null;
 
   // ── Helpers ──
   function showScreen(el) {
@@ -597,9 +767,15 @@
     }, 500);
   });
 
-  // Video ends → show replay/next buttons
+  // Video starts → show skip button
+  storyVideo.addEventListener('play', () => {
+    btnSkip.classList.add('visible');
+  });
+
+  // Video ends → hide skip, show replay/next buttons
   storyVideo.addEventListener('ended', () => {
     storyVideo.pause();
+    btnSkip.classList.remove('visible');
     videoBtns.classList.add('visible');
   });
 
@@ -610,6 +786,40 @@
     storyVideo.currentTime = 0;
     storyVideo.play().catch(() => {});
   });
+
+  // Skip button — same transition as Next
+  function goToLesson1() {
+    playClick();
+    storyVideo.pause();
+    btnSkip.classList.remove('visible');
+    videoBtns.classList.remove('visible');
+    hideScreen(screenVideo);
+
+    setTimeout(() => {
+      showScreen(screenLesson1);
+      fadeIn(gameplayMusic, 0.35, 1500);
+
+      setTimeout(() => {
+        lessonWordart.classList.add('drop-in');
+
+        setTimeout(() => {
+          hattimLessonWrap.classList.add('visible');
+          hattimWaveVideo.play().catch(() => {});
+
+          setTimeout(() => {
+            btnLesson.classList.add('visible');
+
+            handTimer = setTimeout(() => {
+              handHint.classList.add('visible');
+            }, 12000);
+
+          }, 800);
+        }, 700);
+      }, 200);
+    }, 500);
+  }
+
+  btnSkip.addEventListener('click', goToLesson1);
 
   // ══════════════════════════════
   // SCREEN 3 → SCREEN 4 (lesson 1)
@@ -632,22 +842,58 @@
           setTimeout(() => {
             btnLesson.classList.add('visible');
 
-            // Hand hint after 12 seconds of no click
-            let handTimer = setTimeout(() => {
+            handTimer = setTimeout(() => {
               handHint.classList.add('visible');
             }, 12000);
-
-            btnLesson.addEventListener('click', () => {
-              clearTimeout(handTimer);
-              handHint.classList.remove('visible');
-              playClick();
-              // TODO: next lesson screen
-            }, { once: true });
 
           }, 800);
         }, 700);
       }, 200);
     }, 600);
+  });
+
+  // ── Lesson 1 pill → Friends screen (single handler, always active)
+  btnLesson.addEventListener('click', () => {
+    if (handTimer) { clearTimeout(handTimer); handTimer = null; }
+    handHint.classList.remove('visible');
+    playClick();
+    storyVideo.pause();
+    hideScreen(screenVideo);
+    hideScreen(screenLesson1);
+
+    setTimeout(() => {
+      showScreen(screenFriends);
+      hattimIdleWrap.classList.add('visible');
+      hattimIdleVideo.play().catch(() => {});
+
+      setTimeout(() => {
+        friendsQuestion.classList.add('visible');
+        setTimeout(() => { btnFriends.classList.add('visible'); }, 500);
+      }, 300);
+    }, 500);
+  });
+
+  // Friends button — swap to thumbsup animation
+  btnFriends.addEventListener('click', () => {
+    playClick();
+    friendsQuestion.classList.remove('visible');
+    btnFriends.classList.remove('visible');
+
+    hattimIdleVideo.loop = false;
+    hattimIdleVideo.src = 'anim-thumbsup.webm';
+    hattimIdleVideo.play().catch(() => {});
+
+    hattimIdleVideo.addEventListener('ended', () => {
+      teachNameText.classList.add('visible');
+      setTimeout(() => { btnPlay.classList.add('visible'); }, 300);
+    }, { once: true });
+  });
+
+  // Play button → Sentence screen (placeholder)
+  btnPlay.addEventListener('click', () => {
+    playClick();
+    hideScreen(screenFriends);
+    setTimeout(() => { showScreen(screenSentence); }, 500);
   });
 
 </script>
