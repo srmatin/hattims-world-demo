@@ -838,6 +838,234 @@
       cursor: pointer;
       backdrop-filter: blur(6px);
     }
+
+    /* ══════════════════════════════
+       SCREEN 9 — Tomar Naam Ki: Word Cards
+    ══════════════════════════════ */
+    #screen-9 {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 6vh;
+      z-index: 15;
+    }
+    #word-cards-row-9 {
+      display: flex;
+      gap: clamp(12px, 2vw, 28px);
+      justify-content: center;
+      align-items: flex-start;
+      transition: opacity 0.6s ease;
+    }
+    #center-pose-wrap-9 {
+      margin-top: 2vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+    #center-pose-img-9 {
+      height: clamp(200px, 45vh, 450px);
+      object-fit: contain;
+      transition: opacity 0.2s ease;
+    }
+    #center-pose-img-9.fading { opacity: 0; }
+
+    #screen9-end-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #45C3F5 0%, #0A7DB5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+      z-index: 1;
+    }
+
+    #screen9-end-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #screen9-end-wip-pill {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255,255,255,0.25);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(13px, 1.6vw, 16px);
+      padding: 6px 20px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+
+    /* ══════════════════════════════
+       SCREEN 10 — Tomar Naam Ki: Word Recall
+    ══════════════════════════════ */
+    #screen-10 {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 16;
+    }
+    #screen10-pose {
+      height: clamp(280px, 58vh, 500px);
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #screen10-pose.visible { opacity: 1; }
+    #screen10-label {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: clamp(22px, 3.2vw, 38px);
+      color: #00B4C8;
+      background: white;
+      border-radius: 40px;
+      padding: 10px 44px;
+      margin-top: 3vh;
+      opacity: 0;
+      transition: opacity 0.4s ease 0.2s;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    }
+    #screen10-label.visible { opacity: 1; }
+
+    /* ══════════════════════════════
+       SCREEN 11 — Tomar Naam Ki: Choose & Match Game
+    ══════════════════════════════ */
+    #screen-11 {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 6vh;
+      z-index: 17;
+    }
+    #game-cards-row-11 {
+      display: flex;
+      gap: clamp(12px, 2vw, 28px);
+      justify-content: center;
+      align-items: flex-start;
+      transition: opacity 0.6s ease;
+    }
+    #gc11-tomar .game-card-fill-img,
+    #gc11-naam .game-card-fill-img,
+    #gc11-ki .game-card-fill-img {
+      transform: scale(1.0);
+      transform-origin: center center;
+    }
+    #game-choices-row-11 {
+      display: flex;
+      gap: clamp(12px, 2vw, 28px);
+      justify-content: center;
+      align-items: flex-end;
+      margin-top: 4vh;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #game-choices-row-11.visible { opacity: 1; }
+    #screen11-end-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #45C3F5 0%, #0A7DB5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+      z-index: 1;
+    }
+    #screen11-end-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #screen11-end-wip-pill {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255,255,255,0.25);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(13px, 1.6vw, 16px);
+      padding: 6px 20px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+
+    /* ══════════════════════════════
+       SCREEN 12 — Level Complete
+    ══════════════════════════════ */
+    #screen-12 {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 18;
+    }
+    #stars12 {
+      position: absolute;
+      top: 38%;
+      left: 50%;
+      width: min(60vw, 640px);
+      height: auto;
+      transform: translate(-50%, -50%) scale(0.3);
+      opacity: 0;
+      transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #stars12.visible {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    #hattimWaveWrap12 {
+      position: relative;
+      z-index: 1;
+    }
+    #level-complete-pill-12 {
+      margin-top: 2vh;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      pointer-events: none;
+      cursor: default;
+      z-index: 1;
+    }
+    #level-complete-pill-12.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #screen12-btns {
+      position: absolute;
+      bottom: 8vh;
+      left: 0; width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      pointer-events: none;
+    }
+    #screen12-btns.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
   </style>
 </head>
 <body>
@@ -1014,6 +1242,115 @@
 
   </div>
 
+  <!-- ── SCREEN 9: Tomar Naam Ki — Word Cards ── -->
+  <div class="screen" id="screen-9">
+    <p id="sentence9-label" class="sentence-narrator"></p>
+
+    <div id="word-cards-row-9">
+      <div class="word-card inactive" id="card9-tomar">
+        <div class="word-card-img-wrap">
+          <img src="hattim-tomar.png" class="word-card-img" alt="">
+        </div>
+        <div class="word-card-tag">তোমার</div>
+      </div>
+      <div class="word-card inactive" id="card9-naam">
+        <div class="word-card-img-wrap">
+          <img src="hattim-name-is.png" class="word-card-img" alt="">
+        </div>
+        <div class="word-card-tag">নাম</div>
+      </div>
+      <div class="word-card inactive" id="card9-ki">
+        <div class="word-card-img-wrap">
+          <img src="hattim-ki.png" class="word-card-img" alt="">
+        </div>
+        <div class="word-card-tag">কি</div>
+      </div>
+    </div>
+
+    <div id="center-pose-wrap-9">
+      <img id="center-pose-img-9" src="" alt="">
+    </div>
+
+    <div id="screen9-end-overlay">
+      <button id="screen9-end-wip-pill">Placeholder WiP</button>
+    </div>
+
+  </div>
+
+  <!-- ── SCREEN 10: Tomar Naam Ki — Word Recall ── -->
+  <div class="screen" id="screen-10">
+    <img id="screen10-pose" src="" alt="">
+    <div id="screen10-label"></div>
+  </div>
+
+  <!-- ── SCREEN 11: Tomar Naam Ki — Choose & Match Game ── -->
+  <div class="screen" id="screen-11">
+
+    <div id="game-cards-row-11">
+      <div class="game-card" id="gc11-tomar">
+        <div class="game-card-fill">
+          <img class="game-card-fill-img" id="gcfill11-tomar" src="" alt="">
+        </div>
+        <div class="game-card-tag">তোমার</div>
+      </div>
+      <div class="game-card" id="gc11-naam">
+        <div class="game-card-fill">
+          <img class="game-card-fill-img" id="gcfill11-naam" src="" alt="">
+        </div>
+        <div class="game-card-tag">নাম</div>
+      </div>
+      <div class="game-card" id="gc11-ki">
+        <div class="game-card-fill">
+          <img class="game-card-fill-img" id="gcfill11-ki" src="" alt="">
+        </div>
+        <div class="game-card-tag">কি</div>
+      </div>
+    </div>
+
+    <div id="game-choices-row-11">
+      <button class="choice-btn" id="choice11-0"></button>
+      <button class="choice-btn" id="choice11-1"></button>
+      <button class="choice-btn" id="choice11-2"></button>
+    </div>
+
+    <div id="screen11-end-overlay">
+      <button id="screen11-end-wip-pill">Placeholder WiP</button>
+    </div>
+
+  </div>
+
+  <!-- ── SCREEN 12: Level Complete ── -->
+  <div class="screen" id="screen-12">
+    <img id="stars12" src="stars-celebration.png" alt="">
+
+    <div class="hattim-lesson-wrap" id="hattimWaveWrap12">
+      <video id="hattimWaveVideo12" src="Hattim_Wave.webm" muted playsinline loop preload="auto"></video>
+    </div>
+
+    <div class="pill-btn" id="level-complete-pill-12">
+      LEVEL COMPLETE
+    </div>
+
+    <div id="screen12-btns">
+      <button class="circle-btn" id="btnPlayAgain12">
+        <div class="circle">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V2L8 6l4 4V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" fill="white"/>
+          </svg>
+        </div>
+        <span class="lbl">Play Again</span>
+      </button>
+      <button class="circle-btn" id="btnNext12">
+        <div class="circle">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z" fill="white"/>
+          </svg>
+        </div>
+        <span class="lbl">Next</span>
+      </button>
+    </div>
+  </div>
+
 <!-- Audio -->
 <audio id="introMusic"    src="Music_2_kids.mp3" preload="auto"></audio>
 <audio id="gameplayMusic" src="Happy_background_music_for_kids_videos_and_children_games_Apps.mp3" preload="auto" loop></audio>
@@ -1036,6 +1373,20 @@
 <audio id="voiceGood"        src="voice-good.mp3"          preload="auto"></audio>
 <audio id="voiceYourName"    src="voice-your-name.mp3"     preload="auto"></audio>
 <audio id="sfxWrong"         src="sfx-wrong.wav"           preload="auto"></audio>
+<audio id="voiceAgainThreeWords" src="voice-again-three-words.mp3" preload="auto"></audio>
+<audio id="voiceTomarYour"       src="voice-tomar-your.mp3"        preload="auto"></audio>
+<audio id="voiceKiWhat"          src="voice-ki-what.mp3"           preload="auto"></audio>
+<audio id="voiceOneMoreTime"     src="voice-one-more-time.mp3"     preload="auto"></audio>
+<audio id="voiceYourTurnAgain"   src="voice-your-turn-again.mp3"   preload="auto"></audio>
+<audio id="voiceOnceAgainThreeWords" src="voice-once-again-three-words.mp3" preload="auto"></audio>
+<audio id="voiceTomarB"              src="voice-tomar-b.mp3"                preload="auto"></audio>
+<audio id="voiceKiB"                 src="voice-ki-b.mp3"                   preload="auto"></audio>
+<audio id="voiceJoinAgain"           src="voice-join-again.mp3"             preload="auto"></audio>
+<audio id="voiceAgainMix"            src="voice-again-mix.mp3"              preload="auto"></audio>
+<audio id="voiceGoodJob"             src="voice-good-job.mp3"               preload="auto"></audio>
+<audio id="voiceIsntThatWonderful"   src="voice-isnt-that-wonderful.mp3"    preload="auto"></audio>
+<audio id="sfxStars"         src="sfx-stars.wav"          preload="auto"></audio>
+<audio id="voiceAllTheStars" src="voice-all-the-stars.mp3" preload="auto"></audio>
 
 <script>
   // ── Elements ──
@@ -1117,6 +1468,60 @@
   ];
 
   const cardVoices = [voiceAmar, voiceNaam, voiceHattim];
+
+  const screen9           = document.getElementById('screen-9');
+  const sentence9Label    = document.getElementById('sentence9-label');
+  const centerPoseImg9    = document.getElementById('center-pose-img-9');
+  const screen9EndOverlay = document.getElementById('screen9-end-overlay');
+  const screen9EndWipPill = document.getElementById('screen9-end-wip-pill');
+
+  const voiceAgainThreeWords = document.getElementById('voiceAgainThreeWords');
+  const voiceTomarYour       = document.getElementById('voiceTomarYour');
+  const voiceKiWhat          = document.getElementById('voiceKiWhat');
+  const voiceOneMoreTime     = document.getElementById('voiceOneMoreTime');
+  const voiceYourTurnAgain   = document.getElementById('voiceYourTurnAgain');
+
+  const demoCards9 = [
+    { id: 'card9-tomar', img: 'hattim-tomar.png',      centerHeight: '280px', centerScale: 'scale(1.0)' },
+    { id: 'card9-naam',  img: 'hattim-name-is.png',    centerHeight: '280px', centerScale: 'scale(1.0)' },
+    { id: 'card9-ki',    img: 'hattim-ki.png',         centerHeight: '280px', centerScale: 'scale(1.0)' }
+  ];
+
+  const cardVoices9 = [voiceTomarYour, voiceNaam, voiceKiWhat];
+
+  const voiceOnceAgainThreeWords = document.getElementById('voiceOnceAgainThreeWords');
+  const voiceTomarB              = document.getElementById('voiceTomarB');
+  const voiceKiB                 = document.getElementById('voiceKiB');
+  const voiceJoinAgain           = document.getElementById('voiceJoinAgain');
+  const voiceAgainMix            = document.getElementById('voiceAgainMix');
+  const voiceGoodJob             = document.getElementById('voiceGoodJob');
+  const voiceIsntThatWonderful   = document.getElementById('voiceIsntThatWonderful');
+
+  const screen10       = document.getElementById('screen-10');
+  const screen10Pose    = document.getElementById('screen10-pose');
+  const screen10Label   = document.getElementById('screen10-label');
+
+  const screen11           = document.getElementById('screen-11');
+  const gameChoicesRow11   = document.getElementById('game-choices-row-11');
+  const screen11EndOverlay = document.getElementById('screen11-end-overlay');
+  const screen11EndWipPill = document.getElementById('screen11-end-wip-pill');
+  const choiceBtns11       = [
+    document.getElementById('choice11-0'),
+    document.getElementById('choice11-1'),
+    document.getElementById('choice11-2')
+  ];
+
+  const sfxStars          = document.getElementById('sfxStars');
+  const voiceAllTheStars  = document.getElementById('voiceAllTheStars');
+
+  const screen12            = document.getElementById('screen-12');
+  const stars12              = document.getElementById('stars12');
+  const hattimWaveWrap12     = document.getElementById('hattimWaveWrap12');
+  const hattimWaveVideo12    = document.getElementById('hattimWaveVideo12');
+  const levelCompletePill12  = document.getElementById('level-complete-pill-12');
+  const screen12Btns         = document.getElementById('screen12-btns');
+  const btnPlayAgain12       = document.getElementById('btnPlayAgain12');
+  const btnNext12            = document.getElementById('btnNext12');
 
   let handTimer = null;
 
@@ -1440,6 +1845,128 @@
     });
   }
 
+  // ── Screen 9: Tomar Naam Ki — Word Cards demo sequence ──
+  function activateDemoCard9(index) {
+    demoCards9.forEach((c, i) => {
+      const el = document.getElementById(c.id);
+      el.classList.toggle('active',   i === index);
+      el.classList.toggle('inactive', i !== index);
+    });
+    centerPoseImg9.classList.add('fading');
+    setTimeout(() => {
+      centerPoseImg9.src = demoCards9[index].img;
+      centerPoseImg9.style.height = demoCards9[index].centerHeight;
+      centerPoseImg9.style.transform = demoCards9[index].centerScale;
+      centerPoseImg9.classList.remove('fading');
+    }, 250);
+  }
+
+  function resetDemoCards9() {
+    demoCards9.forEach(c => {
+      const el = document.getElementById(c.id);
+      el.classList.remove('active');
+      el.classList.add('inactive');
+    });
+  }
+
+  function runDemoRound9(onComplete) {
+    let step = 0;
+    function next() {
+      if (step >= demoCards9.length) { onComplete(); return; }
+      const i = step;
+      step++;
+      activateDemoCard9(i);
+      playVoice(cardVoices9[i], () => {
+        setTimeout(next, 1200);
+      }, 5000);
+    }
+    next();
+  }
+
+  function startScreen9() {
+    resetDemoCards9();
+    document.getElementById('word-cards-row-9').style.opacity = '';
+    centerPoseImg9.style.opacity = '';
+    screen9EndOverlay.classList.remove('visible');
+    playVoice(voiceAgainThreeWords, () => {
+      sentence9Label.textContent = 'Listen how it is said';
+      setTimeout(() => {
+        runDemoRound9(() => {
+          resetDemoCards9();
+          playVoice(sfxComplete, () => {
+            playVoice(voiceOneMoreTime, () => {
+              sentence9Label.textContent = 'Now repeat with me';
+              setTimeout(() => {
+                runDemoRound9(() => {
+                  resetDemoCards9();
+                  sentence9Label.textContent = '';
+                  playVoice(sfxComplete, () => {
+                    playVoice(voiceYourTurnAgain, () => {
+                      document.getElementById('word-cards-row-9').style.opacity = '0';
+                      centerPoseImg9.style.opacity = '0';
+                      setTimeout(() => {
+                        hideScreen(screen9);
+                        setTimeout(() => {
+                          showScreen(screen10);
+                          startScreen10();
+                        }, 750);
+                      }, 1200);
+                    });
+                  });
+                });
+              }, 500);
+            });
+          });
+        });
+      }, 500);
+    });
+  }
+
+  screen9EndWipPill.addEventListener('click', () => { location.reload(); });
+
+  // ── Screen 10: Tomar Naam Ki — Word Recall ──
+  const screen10Poses = [
+    { img: 'hattim-tomar.png',   label: 'তোমার', scale: 1.0, audio: voiceTomarB },
+    { img: 'hattim-name-is.png', label: 'নাম',    scale: 1.0, audio: voiceNaamB  },
+    { img: 'hattim-ki.png',      label: 'কি',     scale: 1.0, audio: voiceKiB    }
+  ];
+
+  function showScreen10Pose(poseData, onDone) {
+    screen10Pose.src = poseData.img;
+    screen10Pose.style.transform = 'scale(' + poseData.scale + ')';
+    screen10Pose.classList.add('visible');
+    setTimeout(() => {
+      screen10Label.textContent = poseData.label;
+      screen10Label.classList.add('visible');
+      playVoice(poseData.audio, () => {
+        setTimeout(() => {
+          screen10Pose.classList.remove('visible');
+          screen10Label.classList.remove('visible');
+          setTimeout(onDone, 600);
+        }, 800);
+      });
+    }, 300);
+  }
+
+  function startScreen10() {
+    playVoice(voiceOnceAgainThreeWords, () => {
+      setTimeout(() => {
+        let step = 0;
+        function nextPose() {
+          if (step >= screen10Poses.length) {
+            setTimeout(() => {
+              hideScreen(screen10);
+              setTimeout(() => { showScreen(screen11); startScreen11(); }, 750);
+            }, 800);
+            return;
+          }
+          showScreen10Pose(screen10Poses[step++], nextPose);
+        }
+        nextPose();
+      }, 500);
+    });
+  }
+
   // ── Screen 7: Word Recall ──
   const screen7Poses = [
     { img: 'hattim-my.png',        label: 'আমার',   scale: 1.3, audio: voiceAmarB   },
@@ -1638,10 +2165,14 @@
                   setTimeout(() => {
                     playVoice(voiceGood, () => {
                       playVoice(voiceYourName, () => {
-                        // Fade out cards, show end overlay
+                        // Fade out cards, hand off to Screen 9
                         document.getElementById('game-cards-row').style.opacity = '0';
                         setTimeout(() => {
-                          gameEndOverlay.classList.add('visible');
+                          hideScreen(screen8);
+                          setTimeout(() => {
+                            showScreen(screen9);
+                            startScreen9();
+                          }, 750);
                         }, 700);
                       }, 4000);
                     }, 3000);
@@ -1656,6 +2187,217 @@
   }
 
   gameEndWipPill.addEventListener('click', () => { location.reload(); });
+
+  // ── Screen 11: Tomar Naam Ki — Choose & Match Game ──
+
+  const gameData11 = [
+    { id: 'gc11-tomar', fillId: 'gcfill11-tomar', img: 'hattim-tomar.png',   voice: voiceTomarB, scale: 1.0, cover: false },
+    { id: 'gc11-naam',  fillId: 'gcfill11-naam',  img: 'hattim-name-is.png', voice: voiceNaamB,  scale: 1.0, cover: false },
+    { id: 'gc11-ki',    fillId: 'gcfill11-ki',    img: 'hattim-ki.png',      voice: voiceKiB,    scale: 1.0, cover: false }
+  ];
+
+  function resetGameCards11() {
+    gameData11.forEach(d => {
+      const card = document.getElementById(d.id);
+      card.classList.remove('glowing', 'wrong');
+      const img = document.getElementById(d.fillId);
+      img.classList.remove('visible');
+      img.src = '';
+    });
+  }
+
+  function setCardGlow11(cardIndex) {
+    gameData11.forEach((d, i) => {
+      const card = document.getElementById(d.id);
+      card.classList.remove('glowing', 'wrong');
+      if (i === cardIndex) card.classList.add('glowing');
+    });
+  }
+
+  function flashWrong11(cardIndex, onDone) {
+    const card = document.getElementById(gameData11[cardIndex].id);
+    card.classList.remove('glowing');
+    card.classList.add('wrong');
+    sfxWrong.currentTime = 0;
+    sfxWrong.play();
+    setTimeout(() => {
+      card.classList.remove('wrong');
+      card.classList.add('glowing');
+      onDone();
+    }, 800);
+  }
+
+  function fillCard11(cardIndex, onDone) {
+    const d = gameData11[cardIndex];
+    const img = document.getElementById(d.fillId);
+    img.src = d.img;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      img.classList.add('visible');
+    }));
+    const card = document.getElementById(d.id);
+    card.classList.remove('glowing', 'wrong');
+    playVoice(d.voice, onDone, 4000);
+  }
+
+  function renderChoices11(choiceOrder) {
+    choiceBtns11.forEach((btn, i) => {
+      const charIndex = choiceOrder[i];
+      const d = gameData11[charIndex];
+      btn.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = d.img;
+      img.style.transform = 'scale(' + d.scale + ')';
+      img.style.transformOrigin = 'center bottom';
+      if (d.cover) img.style.objectFit = 'cover';
+      btn.appendChild(img);
+      btn.dataset.charIndex = charIndex;
+      btn.classList.remove('fading-out');
+      btn.disabled = false;
+      btn.style.opacity = '';
+      btn.style.transform = '';
+    });
+    gameChoicesRow11.classList.add('visible');
+  }
+
+  function runRound11(choiceOrder, currentCardIndex, onComplete) {
+    renderChoices11(choiceOrder);
+    setCardGlow11(currentCardIndex);
+
+    let locked = false;
+
+    function handleChoice(btn, charIndex) {
+      if (locked) return;
+      if (charIndex === currentCardIndex) {
+        // Correct
+        locked = true;
+        btn.classList.add('fading-out');
+        btn.disabled = true;
+        setTimeout(() => {
+          fillCard11(currentCardIndex, () => {
+            locked = false;
+            currentCardIndex++;
+            if (currentCardIndex < gameData11.length) {
+              setCardGlow11(currentCardIndex);
+            } else {
+              onComplete();
+            }
+          });
+        }, 350);
+      } else {
+        // Wrong — briefly lock buttons during flash
+        locked = true;
+        flashWrong11(currentCardIndex, () => { locked = false; });
+      }
+    }
+
+    choiceBtns11.forEach(btn => {
+      // Clone to remove old listeners
+      const fresh = btn.cloneNode(true);
+      btn.parentNode.replaceChild(fresh, btn);
+      choiceBtns11[parseInt(fresh.id.split('-')[1])] = fresh;
+      fresh.addEventListener('click', () => {
+        handleChoice(fresh, parseInt(fresh.dataset.charIndex));
+      });
+    });
+
+    setCardGlow11(currentCardIndex);
+  }
+
+  function clearChoices11() {
+    choiceBtns11.forEach(btn => {
+      btn.classList.add('fading-out');
+      btn.disabled = true;
+    });
+    setTimeout(() => {
+      gameChoicesRow11.classList.remove('visible');
+      choiceBtns11.forEach(btn => {
+        btn.classList.remove('fading-out');
+        btn.innerHTML = '';
+      });
+    }, 450);
+  }
+
+  function startScreen11() {
+    resetGameCards11();
+    document.getElementById('game-cards-row-11').style.opacity = '';
+    gameChoicesRow11.classList.remove('visible');
+    screen11EndOverlay.classList.remove('visible');
+
+    playVoice(voiceJoinAgain, () => {
+      // Round 1 — in order
+      runRound11(gameRounds[0], 0, () => {
+        clearChoices11();
+        setTimeout(() => {
+          playVoice(sfxComplete, () => {
+            playVoice(voiceAgainMix, () => {
+              resetGameCards11();
+              setTimeout(() => {
+                // Round 2 — shuffled order
+                runRound11(gameRounds[1], 0, () => {
+                  clearChoices11();
+                  setTimeout(() => {
+                    playVoice(voiceGoodJob, () => {
+                      playVoice(voiceIsntThatWonderful, () => {
+                        document.getElementById('game-cards-row-11').style.opacity = '0';
+                        setTimeout(() => {
+                          hideScreen(screen11);
+                          setTimeout(() => {
+                            showScreen(screen12);
+                            startScreen12();
+                          }, 750);
+                        }, 700);
+                      }, 4000);
+                    }, 3000);
+                  }, 400);
+                });
+              }, 500);
+            }, 5000);
+          });
+        }, 400);
+      });
+    }, 6000);
+  }
+
+  screen11EndWipPill.addEventListener('click', () => { location.reload(); });
+
+  // ── Screen 12: Level Complete ──
+  function startScreen12() {
+    stars12.classList.remove('visible');
+    hattimWaveWrap12.classList.remove('visible');
+    levelCompletePill12.classList.remove('visible');
+    screen12Btns.classList.remove('visible');
+
+    setTimeout(() => {
+      hattimWaveWrap12.classList.add('visible');
+      hattimWaveVideo12.play().catch(() => {});
+
+      setTimeout(() => {
+        stars12.classList.add('visible');
+        playVoice(sfxStars, () => {
+          playVoice(voiceAllTheStars, () => {
+            levelCompletePill12.classList.add('visible');
+            setTimeout(() => {
+              screen12Btns.classList.add('visible');
+            }, 700);
+          });
+        });
+      }, 800);
+    }, 300);
+  }
+
+  btnPlayAgain12.addEventListener('click', () => {
+    playClick();
+    hideScreen(screen12);
+    setTimeout(() => {
+      showScreen(screenSentence);
+      startSentenceDemo();
+    }, 750);
+  });
+
+  btnNext12.addEventListener('click', () => {
+    playClick();
+    location.reload();
+  });
 
 </script>
 </body>
