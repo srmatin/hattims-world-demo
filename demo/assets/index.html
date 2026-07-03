@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hattim's World</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Quicksand:wght@500;700&family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -519,10 +519,325 @@
     }
     #btn-wip:hover { background: rgba(255,255,255,0.28); }
 
+    /* ══════════════════════════════
+       SCREEN 6 — Word Cards
+    ══════════════════════════════ */
+    #screen-sentence {
+      background-image: url('gameplay_background_center.png');
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 6vh;
+      z-index: 12;
+    }
+    .sentence-narrator {
+      color: white;
+      font-family: 'Fredoka One', 'Fredoka', sans-serif;
+      font-size: clamp(18px, 2.8vw, 28px);
+      text-align: center;
+      margin: 0 0 4vh 0;
+      min-height: 1.4em;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    #word-cards-row {
+      display: flex;
+      gap: clamp(12px, 2vw, 28px);
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .word-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border-radius: 18px;
+      padding: 14px;
+      width: clamp(130px, 22vw, 210px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+      border: 5px solid transparent;
+      transition: border-color 0.25s ease, filter 0.3s ease, opacity 0.3s ease;
+    }
+    .word-card.active {
+      border-color: #F5A623;
+      filter: none;
+      opacity: 1;
+    }
+    .word-card.inactive {
+      border-color: transparent;
+      filter: grayscale(1);
+      opacity: 0.45;
+    }
+    .word-card-img-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 140px;
+      overflow: hidden;
+    }
+    .word-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    /* amar source image has a huge empty canvas — cover crops the whitespace, scale zooms in on the character */
+    #card-amar .word-card-img {
+      object-fit: cover;
+      transform: scale(1.3);
+      transform-origin: center center;
+    }
+    /* hattim has a tight canvas, just needs a slight boost */
+    #card-hattim .word-card-img {
+      transform: scale(1.2);
+      transform-origin: center center;
+    }
+    .word-card-tag {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: clamp(16px, 2.2vw, 22px);
+      color: #00B4C8;
+      background: #F0FAFB;
+      border-radius: 40px;
+      padding: 5px 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .word-card.inactive .word-card-tag {
+      color: #aaa;
+      background: #f5f5f5;
+    }
+    #word-english-text {
+      color: white;
+      font-family: 'Fredoka One', 'Fredoka', sans-serif;
+      font-size: clamp(20px, 2.6vw, 30px);
+      text-align: center;
+      margin-top: 2vh;
+      min-height: 1.4em;
+      opacity: 0;
+      letter-spacing: 0.04em;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+      transition: opacity 0.35s ease;
+    }
+    #center-pose-wrap {
+      margin-top: 2vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+    #center-pose-img {
+      height: clamp(200px, 45vh, 450px);
+      object-fit: contain;
+      transition: opacity 0.2s ease;
+    }
+    #center-pose-img.fading { opacity: 0; }
+
+    /* ── Screen 7 ── */
+    #screen-7 {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 13;
+    }
+    #screen7-pose {
+      height: clamp(280px, 58vh, 500px);
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #screen7-pose.visible { opacity: 1; }
+    #screen7-label {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: clamp(22px, 3.2vw, 38px);
+      color: #00B4C8;
+      background: white;
+      border-radius: 40px;
+      padding: 10px 44px;
+      margin-top: 3vh;
+      opacity: 0;
+      transition: opacity 0.4s ease 0.2s;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    }
+    #screen7-label.visible { opacity: 1; }
+
     /* ── Friends screen layout overrides ── */
     #hattimIdleWrap { width: min(74.4vw, 768px); }
     #btnFriends, #btnPlay { position: absolute; bottom: 14%; }
     .circle-pulse-btn svg { width: 54px; height: 54px; }
+
+    /* ── Screen 8: Choose & Match Game ── */
+    #screen-8 {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 6vh;
+      z-index: 14;
+    }
+
+    #game-cards-row {
+      display: flex;
+      gap: clamp(12px, 2vw, 28px);
+      justify-content: center;
+      align-items: flex-start;
+      transition: opacity 0.6s ease;
+    }
+
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border-radius: 18px;
+      padding: 14px;
+      width: clamp(130px, 22vw, 210px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+      transition: box-shadow 0.25s ease;
+    }
+
+    .game-card.glowing {
+      animation: cardGlow 1.2s ease-in-out infinite;
+    }
+
+    .game-card.wrong {
+      animation: wrongFlash 0.75s ease-in-out forwards;
+    }
+
+    @keyframes cardGlow {
+      0%, 100% { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 10px 30px 6px rgba(247,148,29,0.55); }
+      50%       { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 14px 40px 10px rgba(247,148,29,0.85); }
+    }
+
+    @keyframes wrongFlash {
+      0%   { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 10px 30px 6px rgba(247,148,29,0.55); }
+      20%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 12px 36px 10px rgba(220,50,50,0.9); }
+      40%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 8px 20px 4px rgba(220,50,50,0.3); }
+      60%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 12px 36px 10px rgba(220,50,50,0.9); }
+      80%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 8px 20px 4px rgba(220,50,50,0.3); }
+      100% { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 10px 30px 6px rgba(247,148,29,0.55); }
+    }
+
+    .game-card-fill {
+      width: 100%;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .game-card-fill-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .game-card-fill-img.visible { opacity: 1; }
+
+    #gc-amar .game-card-fill-img {
+      object-fit: cover;
+      transform: scale(1.3);
+      transform-origin: center center;
+    }
+
+    #gc-hattim .game-card-fill-img {
+      transform: scale(1.2);
+      transform-origin: center center;
+    }
+
+    .game-card-tag {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: clamp(16px, 2.2vw, 22px);
+      color: #00B4C8;
+      background: #F0FAFB;
+      border-radius: 40px;
+      padding: 5px 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    #game-choices-row {
+      display: flex;
+      gap: clamp(12px, 2vw, 28px);
+      justify-content: center;
+      align-items: flex-end;
+      margin-top: 4vh;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #game-choices-row.visible { opacity: 1; }
+
+    .choice-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      width: clamp(130px, 22vw, 210px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .choice-btn:disabled { cursor: default; }
+
+    .choice-btn.fading-out {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .choice-btn img {
+      width: 100%;
+      height: clamp(120px, 24vh, 200px);
+      object-fit: contain;
+      pointer-events: none;
+      display: block;
+    }
+
+
+    #game-end-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #45C3F5 0%, #0A7DB5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+      z-index: 1;
+    }
+
+    #game-end-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #game-end-wip-pill {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255,255,255,0.25);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 999px;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(13px, 1.6vw, 16px);
+      padding: 6px 20px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
   </style>
 </head>
 <body>
@@ -624,15 +939,103 @@
     </button>
   </div>
 
-  <!-- ── SCREEN 6: Sentence placeholder ── -->
+  <!-- ── SCREEN 6: Word Cards ── -->
   <div class="screen" id="screen-sentence">
-    <button id="btn-wip" onclick="location.reload()">Placeholder WiP</button>
+    <p id="sentence-label" class="sentence-narrator"></p>
+
+    <div id="word-cards-row">
+      <div class="word-card inactive" id="card-amar">
+        <div class="word-card-img-wrap">
+          <img src="hattim-my.png" class="word-card-img" alt="">
+        </div>
+        <div class="word-card-tag">আমার</div>
+      </div>
+      <div class="word-card inactive" id="card-naam">
+        <div class="word-card-img-wrap">
+          <img src="hattim-name-is.png" class="word-card-img" alt="">
+        </div>
+        <div class="word-card-tag">নাম</div>
+      </div>
+      <div class="word-card inactive" id="card-hattim">
+        <div class="word-card-img-wrap">
+          <img src="hattim-name-card.png" class="word-card-img" alt="">
+        </div>
+        <div class="word-card-tag">হাটটিম</div>
+      </div>
+    </div>
+
+    <div id="word-english-text"></div>
+
+    <div id="center-pose-wrap">
+      <img id="center-pose-img" src="" alt="">
+    </div>
+
+  </div>
+
+  <!-- ── SCREEN 7: Word Recall ── -->
+  <div class="screen" id="screen-7">
+    <img id="screen7-pose" src="" alt="">
+    <div id="screen7-label"></div>
+  </div>
+
+  <!-- ── SCREEN 8: Choose & Match Game ── -->
+  <div class="screen" id="screen-8">
+
+    <div id="game-cards-row">
+      <div class="game-card" id="gc-amar">
+        <div class="game-card-fill">
+          <img class="game-card-fill-img" id="gcfill-amar" src="" alt="">
+        </div>
+        <div class="game-card-tag">আমার</div>
+      </div>
+      <div class="game-card" id="gc-naam">
+        <div class="game-card-fill">
+          <img class="game-card-fill-img" id="gcfill-naam" src="" alt="">
+        </div>
+        <div class="game-card-tag">নাম</div>
+      </div>
+      <div class="game-card" id="gc-hattim">
+        <div class="game-card-fill">
+          <img class="game-card-fill-img" id="gcfill-hattim" src="" alt="">
+        </div>
+        <div class="game-card-tag">হাটটিম</div>
+      </div>
+    </div>
+
+    <div id="game-choices-row">
+      <button class="choice-btn" id="choice-0"></button>
+      <button class="choice-btn" id="choice-1"></button>
+      <button class="choice-btn" id="choice-2"></button>
+    </div>
+
+    <div id="game-end-overlay">
+      <button id="game-end-wip-pill">Placeholder WiP</button>
+    </div>
+
   </div>
 
 <!-- Audio -->
 <audio id="introMusic"    src="Music_2_kids.mp3" preload="auto"></audio>
 <audio id="gameplayMusic" src="Happy_background_music_for_kids_videos_and_children_games_Apps.mp3" preload="auto" loop></audio>
 <audio id="clickSfx"      src="BUtton_Click_3_-_SFX_Producer.mp3" preload="auto"></audio>
+<audio id="voiceFriends"     src="voice-friends.mp3"      preload="auto"></audio>
+<audio id="voiceTeachName"   src="voice-teach-name.mp3"   preload="auto"></audio>
+<audio id="voiceLessonIntro" src="voice-lesson-intro.mp3" preload="auto"></audio>
+<audio id="voiceAmar"        src="voice-amar.mp3"         preload="auto"></audio>
+<audio id="voiceNaam"        src="voice-naam.mp3"         preload="auto"></audio>
+<audio id="voiceHattim"      src="voice-hattim.mp3"       preload="auto"></audio>
+<audio id="sfxComplete"      src="sfx-round-complete.wav" preload="auto"></audio>
+<audio id="voiceNowRepeat"   src="voice-now-repeat.mp3"   preload="auto"></audio>
+<audio id="voiceNextScreen"  src="voice-next-screen.mp3"  preload="auto"></audio>
+<audio id="voiceRemember"    src="voice-remember.mp3"     preload="auto"></audio>
+<audio id="voiceAmarB"       src="voice-amar-b.mp3"       preload="auto"></audio>
+<audio id="voiceNaamB"       src="voice-naam-b.mp3"       preload="auto"></audio>
+<audio id="voiceHattimB"     src="voice-hattim-b.mp3"     preload="auto"></audio>
+<audio id="voiceChoose"      src="voice-choose.mp3"        preload="auto"></audio>
+<audio id="voiceMix"         src="voice-mix.mp3"           preload="auto"></audio>
+<audio id="voiceGood"        src="voice-good.mp3"          preload="auto"></audio>
+<audio id="voiceYourName"    src="voice-your-name.mp3"     preload="auto"></audio>
+<audio id="sfxWrong"         src="sfx-wrong.wav"           preload="auto"></audio>
 
 <script>
   // ── Elements ──
@@ -667,10 +1070,53 @@
   const btnFriends       = document.getElementById('btnFriends');
   const btnPlay          = document.getElementById('btnPlay');
   const screenSentence   = document.getElementById('screen-sentence');
+  const sentenceLabel    = document.getElementById('sentence-label');
+  const wordEnglishText  = document.getElementById('word-english-text');
+  const centerPoseImg    = document.getElementById('center-pose-img');
+  const demoCards = [
+    { id: 'card-amar',   english: 'My',   img: 'hattim-my.png',        centerHeight: '280px', centerScale: 'scale(1.3)' },
+    { id: 'card-naam',   english: 'Name', img: 'hattim-name-is.png',   centerHeight: '280px', centerScale: 'scale(1.0)' },
+    { id: 'card-hattim', english: '',     img: 'hattim-name-card.png', centerHeight: '280px', centerScale: 'scale(1.2)' }
+  ];
 
   const introMusic    = document.getElementById('introMusic');
   const gameplayMusic = document.getElementById('gameplayMusic');
   const clickSfx      = document.getElementById('clickSfx');
+
+  const voiceFriends     = document.getElementById('voiceFriends');
+  const voiceTeachName   = document.getElementById('voiceTeachName');
+  const voiceLessonIntro = document.getElementById('voiceLessonIntro');
+  const voiceAmar        = document.getElementById('voiceAmar');
+  const voiceNaam        = document.getElementById('voiceNaam');
+  const voiceHattim      = document.getElementById('voiceHattim');
+  const sfxComplete      = document.getElementById('sfxComplete');
+  const voiceNowRepeat   = document.getElementById('voiceNowRepeat');
+  const voiceNextScreen  = document.getElementById('voiceNextScreen');
+  const voiceRemember    = document.getElementById('voiceRemember');
+  const voiceAmarB       = document.getElementById('voiceAmarB');
+  const voiceNaamB       = document.getElementById('voiceNaamB');
+  const voiceHattimB     = document.getElementById('voiceHattimB');
+  const screen7          = document.getElementById('screen-7');
+  const screen7Pose      = document.getElementById('screen7-pose');
+  const screen7Label     = document.getElementById('screen7-label');
+
+  const voiceChoose   = document.getElementById('voiceChoose');
+  const voiceMix      = document.getElementById('voiceMix');
+  const voiceGood     = document.getElementById('voiceGood');
+  const voiceYourName = document.getElementById('voiceYourName');
+  const sfxWrong      = document.getElementById('sfxWrong');
+
+  const screen8         = document.getElementById('screen-8');
+  const gameChoicesRow  = document.getElementById('game-choices-row');
+  const gameEndOverlay  = document.getElementById('game-end-overlay');
+  const gameEndWipPill  = document.getElementById('game-end-wip-pill');
+  const choiceBtns      = [
+    document.getElementById('choice-0'),
+    document.getElementById('choice-1'),
+    document.getElementById('choice-2')
+  ];
+
+  const cardVoices = [voiceAmar, voiceNaam, voiceHattim];
 
   let handTimer = null;
 
@@ -716,6 +1162,21 @@
       audioEl.volume = Math.min(targetVol, targetVol * (step / steps));
       if (step >= steps) clearInterval(timer);
     }, interval);
+  }
+
+  function playVoice(audioEl, onEnd, fallbackMs = 6000) {
+    audioEl.currentTime = 0;
+    let called = false;
+    function finish() {
+      if (called) return;
+      called = true;
+      clearTimeout(fallback);
+      audioEl.removeEventListener('ended', finish);
+      onEnd();
+    }
+    const fallback = setTimeout(finish, fallbackMs);
+    audioEl.addEventListener('ended', finish);
+    audioEl.play().catch(finish);
   }
 
   // ══════════════════════════════
@@ -868,7 +1329,11 @@
 
       setTimeout(() => {
         friendsQuestion.classList.add('visible');
-        setTimeout(() => { btnFriends.classList.add('visible'); }, 500);
+        setTimeout(() => {
+          playVoice(voiceFriends, () => {
+            btnFriends.classList.add('visible');
+          });
+        }, 200);
       }, 300);
     }, 500);
   });
@@ -885,16 +1350,312 @@
 
     hattimIdleVideo.addEventListener('ended', () => {
       teachNameText.classList.add('visible');
-      setTimeout(() => { btnPlay.classList.add('visible'); }, 300);
+      setTimeout(() => {
+        playVoice(voiceTeachName, () => {
+          btnPlay.classList.add('visible');
+        });
+      }, 300);
     }, { once: true });
   });
 
-  // Play button → Sentence screen (placeholder)
+  // Play button → Sentence screen
   btnPlay.addEventListener('click', () => {
     playClick();
     hideScreen(screenFriends);
-    setTimeout(() => { showScreen(screenSentence); }, 500);
+    setTimeout(() => {
+      showScreen(screenSentence);
+      setTimeout(startSentenceDemo, 400);
+    }, 500);
   });
+
+  // ── Screen 6: Word Cards demo sequence ──
+  function activateDemoCard(index) {
+    demoCards.forEach((c, i) => {
+      const el = document.getElementById(c.id);
+      el.classList.toggle('active',   i === index);
+      el.classList.toggle('inactive', i !== index);
+    });
+    centerPoseImg.classList.add('fading');
+    setTimeout(() => {
+      centerPoseImg.src = demoCards[index].img;
+      centerPoseImg.style.height = demoCards[index].centerHeight;
+      centerPoseImg.style.transform = demoCards[index].centerScale;
+      centerPoseImg.classList.remove('fading');
+    }, 250);
+  }
+
+  function resetDemoCards() {
+    demoCards.forEach(c => {
+      const el = document.getElementById(c.id);
+      el.classList.remove('active');
+      el.classList.add('inactive');
+    });
+  }
+
+  function runDemoRound(onComplete) {
+    let step = 0;
+    function next() {
+      if (step >= demoCards.length) { onComplete(); return; }
+      const i = step;
+      step++;
+      activateDemoCard(i);
+      playVoice(cardVoices[i], () => {
+        setTimeout(next, 1200);
+      }, 5000);
+    }
+    next();
+  }
+
+  function startSentenceDemo() {
+    resetDemoCards();
+    playVoice(voiceLessonIntro, () => {
+      sentenceLabel.textContent = 'Listen how it is said';
+      setTimeout(() => {
+        runDemoRound(() => {
+          resetDemoCards();
+          playVoice(sfxComplete, () => {
+            playVoice(voiceNowRepeat, () => {
+              sentenceLabel.textContent = 'Now repeat with me';
+              setTimeout(() => {
+                runDemoRound(() => {
+                  resetDemoCards();
+                  sentenceLabel.textContent = '';
+                  playVoice(sfxComplete, () => {
+                    playVoice(voiceNextScreen, () => {
+                      setTimeout(() => {
+                        hideScreen(screenSentence);
+                        setTimeout(() => {
+                          showScreen(screen7);
+                          startScreen7();
+                        }, 750);
+                      }, 1200);
+                    });
+                  });
+                });
+              }, 500);
+            });
+          });
+        });
+      }, 500);
+    });
+  }
+
+  // ── Screen 7: Word Recall ──
+  const screen7Poses = [
+    { img: 'hattim-my.png',        label: 'আমার',   scale: 1.3, audio: voiceAmarB   },
+    { img: 'hattim-name-is.png',   label: 'নাম',    scale: 1.0, audio: voiceNaamB   },
+    { img: 'hattim-name-card.png', label: 'হাটটিম', scale: 1.2, audio: voiceHattimB }
+  ];
+
+  function showScreen7Pose(poseData, onDone) {
+    screen7Pose.src = poseData.img;
+    screen7Pose.style.transform = 'scale(' + poseData.scale + ')';
+    screen7Pose.classList.add('visible');
+    setTimeout(() => {
+      screen7Label.textContent = poseData.label;
+      screen7Label.classList.add('visible');
+      playVoice(poseData.audio, () => {
+        setTimeout(() => {
+          screen7Pose.classList.remove('visible');
+          screen7Label.classList.remove('visible');
+          setTimeout(onDone, 600);
+        }, 800);
+      });
+    }, 300);
+  }
+
+  function startScreen7() {
+    playVoice(voiceRemember, () => {
+      setTimeout(() => {
+        let step = 0;
+        function nextPose() {
+          if (step >= screen7Poses.length) {
+            setTimeout(() => {
+              hideScreen(screen7);
+              setTimeout(() => { showScreen(screen8); startScreen8(); }, 500);
+            }, 800);
+            return;
+          }
+          showScreen7Pose(screen7Poses[step++], nextPose);
+        }
+        nextPose();
+      }, 500);
+    });
+  }
+
+  // ── Screen 8: Choose & Match Game ──
+
+  const gameData = [
+    { id: 'gc-amar',   fillId: 'gcfill-amar',   img: 'hattim-my.png',        voice: voiceAmarB,   scale: 1.3, cover: true  },
+    { id: 'gc-naam',   fillId: 'gcfill-naam',   img: 'hattim-name-is.png',   voice: voiceNaamB,   scale: 1.0, cover: false },
+    { id: 'gc-hattim', fillId: 'gcfill-hattim', img: 'hattim-name-card.png', voice: voiceHattimB, scale: 1.2, cover: false }
+  ];
+
+  // Round 1: in order [0,1,2]. Round 2: shuffled [1,2,0].
+  const gameRounds = [[0, 1, 2], [1, 2, 0]];
+
+  function resetGameCards() {
+    gameData.forEach(d => {
+      const card = document.getElementById(d.id);
+      card.classList.remove('glowing', 'wrong');
+      const img = document.getElementById(d.fillId);
+      img.classList.remove('visible');
+      img.src = '';
+    });
+  }
+
+  function setCardGlow(cardIndex) {
+    gameData.forEach((d, i) => {
+      const card = document.getElementById(d.id);
+      card.classList.remove('glowing', 'wrong');
+      if (i === cardIndex) card.classList.add('glowing');
+    });
+  }
+
+  function flashWrong(cardIndex, onDone) {
+    const card = document.getElementById(gameData[cardIndex].id);
+    card.classList.remove('glowing');
+    card.classList.add('wrong');
+    sfxWrong.currentTime = 0;
+    sfxWrong.play();
+    setTimeout(() => {
+      card.classList.remove('wrong');
+      card.classList.add('glowing');
+      onDone();
+    }, 800);
+  }
+
+  function fillCard(cardIndex, onDone) {
+    const d = gameData[cardIndex];
+    const img = document.getElementById(d.fillId);
+    img.src = d.img;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      img.classList.add('visible');
+    }));
+    const card = document.getElementById(d.id);
+    card.classList.remove('glowing', 'wrong');
+    playVoice(d.voice, onDone, 4000);
+  }
+
+  function renderChoices(choiceOrder) {
+    choiceBtns.forEach((btn, i) => {
+      const charIndex = choiceOrder[i];
+      const d = gameData[charIndex];
+      btn.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = d.img;
+      img.style.transform = 'scale(' + d.scale + ')';
+      img.style.transformOrigin = 'center bottom';
+      if (d.cover) img.style.objectFit = 'cover';
+      btn.appendChild(img);
+      btn.dataset.charIndex = charIndex;
+      btn.classList.remove('fading-out');
+      btn.disabled = false;
+      btn.style.opacity = '';
+      btn.style.transform = '';
+    });
+    gameChoicesRow.classList.add('visible');
+  }
+
+  function runRound(choiceOrder, currentCardIndex, onComplete) {
+    renderChoices(choiceOrder);
+    setCardGlow(currentCardIndex);
+
+    let locked = false;
+
+    function handleChoice(btn, charIndex) {
+      if (locked) return;
+      if (charIndex === currentCardIndex) {
+        // Correct
+        locked = true;
+        btn.classList.add('fading-out');
+        btn.disabled = true;
+        setTimeout(() => {
+          fillCard(currentCardIndex, () => {
+            locked = false;
+            currentCardIndex++;
+            if (currentCardIndex < gameData.length) {
+              setCardGlow(currentCardIndex);
+            } else {
+              onComplete();
+            }
+          });
+        }, 350);
+      } else {
+        // Wrong — briefly lock buttons during flash
+        locked = true;
+        flashWrong(currentCardIndex, () => { locked = false; });
+      }
+    }
+
+    choiceBtns.forEach(btn => {
+      // Clone to remove old listeners
+      const fresh = btn.cloneNode(true);
+      btn.parentNode.replaceChild(fresh, btn);
+      choiceBtns[parseInt(fresh.id.split('-')[1])] = fresh;
+      fresh.addEventListener('click', () => {
+        handleChoice(fresh, parseInt(fresh.dataset.charIndex));
+      });
+    });
+
+    setCardGlow(currentCardIndex);
+  }
+
+  function clearChoices() {
+    choiceBtns.forEach(btn => {
+      btn.classList.add('fading-out');
+      btn.disabled = true;
+    });
+    setTimeout(() => {
+      gameChoicesRow.classList.remove('visible');
+      choiceBtns.forEach(btn => {
+        btn.classList.remove('fading-out');
+        btn.innerHTML = '';
+      });
+    }, 450);
+  }
+
+  function startScreen8() {
+    resetGameCards();
+    document.getElementById('game-cards-row').style.opacity = '';
+    gameChoicesRow.classList.remove('visible');
+    gameEndOverlay.classList.remove('visible');
+
+    playVoice(voiceChoose, () => {
+      // Round 1 — in order
+      runRound(gameRounds[0], 0, () => {
+        // Round 1 done: clear cards, play sfx + mix voice, then round 2
+        clearChoices();
+        setTimeout(() => {
+          playVoice(sfxComplete, () => {
+            playVoice(voiceMix, () => {
+              // Clear card images for round 2
+              resetGameCards();
+              setTimeout(() => {
+                // Round 2 — shuffled order
+                runRound(gameRounds[1], 0, () => {
+                  clearChoices();
+                  setTimeout(() => {
+                    playVoice(voiceGood, () => {
+                      playVoice(voiceYourName, () => {
+                        // Fade out cards, show end overlay
+                        document.getElementById('game-cards-row').style.opacity = '0';
+                        setTimeout(() => {
+                          gameEndOverlay.classList.add('visible');
+                        }, 700);
+                      }, 4000);
+                    }, 3000);
+                  }, 400);
+                });
+              }, 500);
+            }, 5000);
+          });
+        }, 400);
+      });
+    }, 6000);
+  }
+
+  gameEndWipPill.addEventListener('click', () => { location.reload(); });
 
 </script>
 </body>
