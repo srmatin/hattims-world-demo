@@ -23,6 +23,9 @@
       --orange-400: #F7941D;
       --orange-300: #F9A94C;
       --white: #ffffff;
+      /* Confident deceleration curves (stronger than the CSS defaults) */
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
     }
 
     html, body {
@@ -76,15 +79,18 @@
       top: 0; left: -75%;
       width: 50%; height: 100%;
       background: linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
-      transform: skewX(-20deg);
-      transition: left 0.45s ease;
+      transform: translateX(0) skewX(-20deg);
+      transition: transform 0.45s var(--ease-out);
     }
 
-    .pill-btn:hover::before { left: 140%; }
-    .pill-btn:hover {
-      background: var(--orange-300);
-      transform: translateY(-3px);
-      box-shadow: 0 9px 0 #c4700f, 0 14px 32px rgba(0,0,0,0.28);
+    /* Hover only on real pointers — tablets get stuck hover states on tap */
+    @media (hover: hover) and (pointer: fine) {
+      .pill-btn:hover::before { transform: translateX(430%) skewX(-20deg); }
+      .pill-btn:hover {
+        background: var(--orange-300);
+        transform: translateY(-3px);
+        box-shadow: 0 9px 0 #c4700f, 0 14px 32px rgba(0,0,0,0.28);
+      }
     }
     .pill-btn:active {
       transform: translateY(3px);
@@ -304,9 +310,11 @@
       transition: transform 0.12s ease, box-shadow 0.12s ease;
     }
 
-    .circle-btn:hover .circle {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 0 #8B4A00, 0 12px 24px rgba(0,0,0,0.35);
+    @media (hover: hover) and (pointer: fine) {
+      .circle-btn:hover .circle {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 0 #8B4A00, 0 12px 24px rgba(0,0,0,0.35);
+      }
     }
 
     .circle-btn:active .circle {
@@ -434,7 +442,9 @@
     }
     #btn-skip svg { width: 18px; height: 18px; }
     #btn-skip.visible { opacity: 1; pointer-events: all; }
-    #btn-skip:hover { background: rgba(255,255,255,0.25); }
+    @media (hover: hover) and (pointer: fine) {
+      #btn-skip:hover { background: rgba(255,255,255,0.25); }
+    }
 
     /* ══════════════════════════════
        SCREEN 5 — FRIENDS
@@ -525,6 +535,18 @@
       justify-content: center;
       align-items: flex-start;
       transition: opacity 0.6s ease;
+    }
+
+    /* Cards rise in with a small stagger when their screen appears */
+    .screen.active .cards-row > * {
+      animation: cardRise 0.55s var(--ease-out) backwards;
+    }
+    .screen.active .cards-row > *:nth-child(2) { animation-delay: 70ms; }
+    .screen.active .cards-row > *:nth-child(3) { animation-delay: 140ms; }
+
+    @keyframes cardRise {
+      from { transform: translateY(16px); }
+      to   { transform: translateY(0); }
     }
     .word-card {
       display: flex;
@@ -665,7 +687,16 @@
     }
 
     .game-card.wrong {
-      animation: wrongFlash 0.75s ease-in-out forwards;
+      animation: wrongFlash 0.75s ease-in-out forwards, cardShake 0.45s var(--ease-out);
+    }
+
+    /* Gentle side-to-side "no" shake, transform-only */
+    @keyframes cardShake {
+      0%   { transform: translateX(0); }
+      25%  { transform: translateX(-7px); }
+      50%  { transform: translateX(6px); }
+      75%  { transform: translateX(-4px); }
+      100% { transform: translateX(0); }
     }
 
     @keyframes cardGlow {
@@ -689,7 +720,12 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      /* Correct answers pop in from 92% rather than fading from nothing */
+      transform: scale(0.92);
+      transition: transform 0.35s var(--ease-out);
     }
+
+    .game-card-fill:has(.game-card-fill-img.visible) { transform: scale(1); }
 
     .game-card-fill-img {
       width: 100%;
@@ -747,14 +783,22 @@
       justify-content: center;
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      /* Fast transform for press feedback; fade-out overrides below */
+      transition: opacity 0.4s ease, transform 0.15s var(--ease-out);
     }
+
+    .choice-btn:not(:disabled):active { transform: scale(0.96); }
 
     .choice-btn:disabled { cursor: default; }
 
     .choice-btn.fading-out {
       opacity: 0;
       transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .choice-btn.shake {
+      animation: cardShake 0.45s var(--ease-out);
     }
 
     .choice-btn img {
@@ -798,7 +842,10 @@
       padding: 6px 20px;
       cursor: pointer;
       backdrop-filter: blur(6px);
+      transition: transform 0.15s var(--ease-out);
     }
+
+    .wip-pill:active { transform: scale(0.96); }
 
     /* ══════════════════════════════
        SCREEN 9 — Tomar Naam Ki: Word Cards
@@ -852,6 +899,27 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* ── Reduced motion: stop loops and movement, keep the fades that convey state ── */
+    @media (prefers-reduced-motion: reduce) {
+      .egg-wrap img,
+      .tap-hint,
+      .hand-svg,
+      .circle-pulse-btn,
+      .screen.active .cards-row > *,
+      .choice-btn.shake,
+      .game-card.wrong,
+      .game-card.glowing {
+        animation: none !important;
+      }
+      /* Glow loop replaced by a steady highlight so the target card stays obvious */
+      .game-card.glowing {
+        box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 10px 30px 6px rgba(247,148,29,0.7);
+      }
+      .game-card.wrong {
+        box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 12px 36px 10px rgba(220,50,50,0.8);
+      }
+    }
   </style>
 </head>
 <body>
@@ -863,7 +931,7 @@
       <div class="egg-wrap"><img src="egg_pink.png"    alt="pink egg" /></div>
       <div class="egg-wrap"><img src="egg_green.png"   alt="green egg" /></div>
     </div>
-    <span class="tap-hint">✨ Tap to Begin ✨</span>
+    <span class="tap-hint">Tap to Begin</span>
   </div>
 
   <!-- ── SCREEN 2: Logo + Hattim + Start ── -->
@@ -1855,8 +1923,10 @@
           });
         }, 350);
       } else {
-        // Wrong — briefly lock buttons during flash
+        // Wrong — shake the tapped choice and briefly lock buttons during flash
         locked = true;
+        btn.classList.add('shake');
+        setTimeout(() => btn.classList.remove('shake'), 500);
         flashWrong(currentCardIndex, () => { locked = false; });
       }
     }
