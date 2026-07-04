@@ -251,8 +251,8 @@
       display: block;
     }
 
-    /* Replay + Next buttons overlay */
-    #video-btns {
+    /* Replay + Next buttons overlay (shared by screens 3 and 12) */
+    .bottom-btns {
       position: absolute;
       bottom: 8vh;
       left: 0; width: 100%;
@@ -267,7 +267,7 @@
       pointer-events: none;
     }
 
-    #video-btns.visible {
+    .bottom-btns.visible {
       opacity: 1;
       transform: translateY(0);
       pointer-events: all;
@@ -487,50 +487,19 @@
     }
 
     /* ══════════════════════════════
-       SCREEN 6 — SENTENCE WiP
-    ══════════════════════════════ */
-    #screen-sentence {
-      background-image: url('lesson1-sentence-wip.png');
-      background-size: cover;
-      background-position: center;
-      z-index: 12;
-    }
-
-    #btn-wip {
-      position: absolute;
-      top: 24px;
-      right: 32px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,0.15);
-      border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 40px;
-      padding: 8px 20px;
-      color: white;
-      font-family: 'Quicksand', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      z-index: 20;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    }
-    #btn-wip:hover { background: rgba(255,255,255,0.28); }
-
-    /* ══════════════════════════════
        SCREEN 6 — Word Cards
     ══════════════════════════════ */
-    #screen-sentence {
-      background-image: url('gameplay_background_center.png');
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* Shared layout for lesson screens (6, 8, 9, 11): bg + top-aligned column */
+    .lesson-screen {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
       justify-content: flex-start;
       padding-top: 6vh;
-      z-index: 12;
     }
+    /* Shared layout for recall/celebration screens (7, 10, 12): bg + centered */
+    .recall-screen {
+      background: url('gameplay_background_center.png') center/cover no-repeat;
+    }
+    #screen-sentence { z-index: 12; }
     .sentence-narrator {
       color: white;
       font-family: 'Fredoka One', 'Fredoka', sans-serif;
@@ -540,11 +509,13 @@
       min-height: 1.4em;
       text-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-    #word-cards-row {
+    /* Shared card row (screens 6, 8, 9, 11) */
+    .cards-row {
       display: flex;
       gap: clamp(12px, 2vw, 28px);
       justify-content: center;
       align-items: flex-start;
+      transition: opacity 0.6s ease;
     }
     .word-card {
       display: flex;
@@ -620,37 +591,32 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.35);
       transition: opacity 0.35s ease;
     }
-    #center-pose-wrap {
+    /* Shared center pose (screens 6, 9) */
+    .center-pose-wrap {
       margin-top: 2vh;
       display: flex;
       justify-content: center;
       align-items: center;
       flex: 1;
     }
-    #center-pose-img {
+    .center-pose-img {
       height: clamp(200px, 45vh, 450px);
       object-fit: contain;
       transition: opacity 0.2s ease;
     }
-    #center-pose-img.fading { opacity: 0; }
+    .center-pose-img.fading { opacity: 0; }
 
     /* ── Screen 7 ── */
-    #screen-7 {
-      background: url('gameplay_background_center.png') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 13;
-    }
-    #screen7-pose {
+    #screen-7 { z-index: 13; }
+    /* Shared recall pose + label (screens 7, 10) */
+    .recall-pose {
       height: clamp(280px, 58vh, 500px);
       object-fit: contain;
       opacity: 0;
       transition: opacity 0.5s ease;
     }
-    #screen7-pose.visible { opacity: 1; }
-    #screen7-label {
+    .recall-pose.visible { opacity: 1; }
+    .recall-label {
       font-family: 'Hind Siliguri', sans-serif;
       font-size: clamp(22px, 3.2vw, 38px);
       color: #00B4C8;
@@ -662,7 +628,7 @@
       transition: opacity 0.4s ease 0.2s;
       box-shadow: 0 3px 12px rgba(0,0,0,0.1);
     }
-    #screen7-label.visible { opacity: 1; }
+    .recall-label.visible { opacity: 1; }
 
     /* ── Friends screen layout overrides ── */
     #hattimIdleWrap { width: min(74.4vw, 768px); }
@@ -670,23 +636,7 @@
     .circle-pulse-btn svg { width: 54px; height: 54px; }
 
     /* ── Screen 8: Choose & Match Game ── */
-    #screen-8 {
-      background: url('gameplay_background_center.png') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 6vh;
-      z-index: 14;
-    }
-
-    #game-cards-row {
-      display: flex;
-      gap: clamp(12px, 2vw, 28px);
-      justify-content: center;
-      align-items: flex-start;
-      transition: opacity 0.6s ease;
-    }
+    #screen-8 { z-index: 14; }
 
     .game-card {
       display: flex;
@@ -764,7 +714,8 @@
       text-align: center;
     }
 
-    #game-choices-row {
+    /* Shared choices row (screens 8, 11) */
+    .choices-row {
       display: flex;
       gap: clamp(12px, 2vw, 28px);
       justify-content: center;
@@ -774,7 +725,7 @@
       transition: opacity 0.5s ease;
     }
 
-    #game-choices-row.visible { opacity: 1; }
+    .choices-row.visible { opacity: 1; }
 
     .choice-btn {
       background: none;
@@ -806,7 +757,8 @@
     }
 
 
-    #game-end-overlay {
+    /* Shared end-of-screen overlay + WiP pill (screens 8, 9, 11) */
+    .end-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(160deg, #45C3F5 0%, #0A7DB5 100%);
@@ -819,12 +771,12 @@
       z-index: 1;
     }
 
-    #game-end-overlay.visible {
+    .end-overlay.visible {
       opacity: 1;
       pointer-events: all;
     }
 
-    #game-end-wip-pill {
+    .wip-pill {
       position: absolute;
       top: 16px;
       right: 20px;
@@ -842,178 +794,22 @@
     /* ══════════════════════════════
        SCREEN 9 — Tomar Naam Ki: Word Cards
     ══════════════════════════════ */
-    #screen-9 {
-      background: url('gameplay_background_center.png') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 6vh;
-      z-index: 15;
-    }
-    #word-cards-row-9 {
-      display: flex;
-      gap: clamp(12px, 2vw, 28px);
-      justify-content: center;
-      align-items: flex-start;
-      transition: opacity 0.6s ease;
-    }
-    #center-pose-wrap-9 {
-      margin-top: 2vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-    }
-    #center-pose-img-9 {
-      height: clamp(200px, 45vh, 450px);
-      object-fit: contain;
-      transition: opacity 0.2s ease;
-    }
-    #center-pose-img-9.fading { opacity: 0; }
-
-    #screen9-end-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, #45C3F5 0%, #0A7DB5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.7s ease;
-      z-index: 1;
-    }
-
-    #screen9-end-overlay.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    #screen9-end-wip-pill {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      background: rgba(255,255,255,0.25);
-      border: 1.5px solid rgba(255,255,255,0.5);
-      border-radius: 999px;
-      color: white;
-      font-family: 'Fredoka', sans-serif;
-      font-size: clamp(13px, 1.6vw, 16px);
-      padding: 6px 20px;
-      cursor: pointer;
-      backdrop-filter: blur(6px);
-    }
+    #screen-9 { z-index: 15; }
 
     /* ══════════════════════════════
        SCREEN 10 — Tomar Naam Ki: Word Recall
     ══════════════════════════════ */
-    #screen-10 {
-      background: url('gameplay_background_center.png') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 16;
-    }
-    #screen10-pose {
-      height: clamp(280px, 58vh, 500px);
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    #screen10-pose.visible { opacity: 1; }
-    #screen10-label {
-      font-family: 'Hind Siliguri', sans-serif;
-      font-size: clamp(22px, 3.2vw, 38px);
-      color: #00B4C8;
-      background: white;
-      border-radius: 40px;
-      padding: 10px 44px;
-      margin-top: 3vh;
-      opacity: 0;
-      transition: opacity 0.4s ease 0.2s;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-    }
-    #screen10-label.visible { opacity: 1; }
+    #screen-10 { z-index: 16; }
 
     /* ══════════════════════════════
        SCREEN 11 — Tomar Naam Ki: Choose & Match Game
     ══════════════════════════════ */
-    #screen-11 {
-      background: url('gameplay_background_center.png') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 6vh;
-      z-index: 17;
-    }
-    #game-cards-row-11 {
-      display: flex;
-      gap: clamp(12px, 2vw, 28px);
-      justify-content: center;
-      align-items: flex-start;
-      transition: opacity 0.6s ease;
-    }
-    #gc11-tomar .game-card-fill-img,
-    #gc11-naam .game-card-fill-img,
-    #gc11-ki .game-card-fill-img {
-      transform: scale(1.0);
-      transform-origin: center center;
-    }
-    #game-choices-row-11 {
-      display: flex;
-      gap: clamp(12px, 2vw, 28px);
-      justify-content: center;
-      align-items: flex-end;
-      margin-top: 4vh;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    #game-choices-row-11.visible { opacity: 1; }
-    #screen11-end-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, #45C3F5 0%, #0A7DB5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.7s ease;
-      z-index: 1;
-    }
-    #screen11-end-overlay.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-    #screen11-end-wip-pill {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      background: rgba(255,255,255,0.25);
-      border: 1.5px solid rgba(255,255,255,0.5);
-      border-radius: 999px;
-      color: white;
-      font-family: 'Fredoka', sans-serif;
-      font-size: clamp(13px, 1.6vw, 16px);
-      padding: 6px 20px;
-      cursor: pointer;
-      backdrop-filter: blur(6px);
-    }
+    #screen-11 { z-index: 17; }
 
     /* ══════════════════════════════
        SCREEN 12 — Level Complete
     ══════════════════════════════ */
-    #screen-12 {
-      background: url('gameplay_background_center.png') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 18;
-    }
+    #screen-12 { z-index: 18; }
     #stars12 {
       position: absolute;
       top: 38%;
@@ -1046,25 +842,6 @@
     #level-complete-pill-12.visible {
       opacity: 1;
       transform: translateY(0);
-    }
-    #screen12-btns {
-      position: absolute;
-      bottom: 8vh;
-      left: 0; width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 48px;
-      z-index: 10;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-      pointer-events: none;
-    }
-    #screen12-btns.visible {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
     }
   </style>
 </head>
@@ -1107,7 +884,7 @@
       </svg>
       <span>Skip</span>
     </button>
-    <div id="video-btns">
+    <div id="video-btns" class="bottom-btns">
       <button class="circle-btn" id="btnReplay">
         <div class="circle">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1168,10 +945,10 @@
   </div>
 
   <!-- ── SCREEN 6: Word Cards ── -->
-  <div class="screen" id="screen-sentence">
+  <div class="screen lesson-screen" id="screen-sentence">
     <p id="sentence-label" class="sentence-narrator"></p>
 
-    <div id="word-cards-row">
+    <div id="word-cards-row" class="cards-row">
       <div class="word-card inactive" id="card-amar">
         <div class="word-card-img-wrap">
           <img src="hattim-my.png" class="word-card-img" alt="">
@@ -1194,22 +971,22 @@
 
     <div id="word-english-text"></div>
 
-    <div id="center-pose-wrap">
-      <img id="center-pose-img" src="" alt="">
+    <div id="center-pose-wrap" class="center-pose-wrap">
+      <img id="center-pose-img" class="center-pose-img" src="" alt="">
     </div>
 
   </div>
 
   <!-- ── SCREEN 7: Word Recall ── -->
-  <div class="screen" id="screen-7">
-    <img id="screen7-pose" src="" alt="">
-    <div id="screen7-label"></div>
+  <div class="screen recall-screen" id="screen-7">
+    <img id="screen7-pose" class="recall-pose" src="" alt="">
+    <div id="screen7-label" class="recall-label"></div>
   </div>
 
   <!-- ── SCREEN 8: Choose & Match Game ── -->
-  <div class="screen" id="screen-8">
+  <div class="screen lesson-screen" id="screen-8">
 
-    <div id="game-cards-row">
+    <div id="game-cards-row" class="cards-row">
       <div class="game-card" id="gc-amar">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill-amar" src="" alt="">
@@ -1230,23 +1007,23 @@
       </div>
     </div>
 
-    <div id="game-choices-row">
+    <div id="game-choices-row" class="choices-row">
       <button class="choice-btn" id="choice-0"></button>
       <button class="choice-btn" id="choice-1"></button>
       <button class="choice-btn" id="choice-2"></button>
     </div>
 
-    <div id="game-end-overlay">
-      <button id="game-end-wip-pill">Placeholder WiP</button>
+    <div id="game-end-overlay" class="end-overlay">
+      <button id="game-end-wip-pill" class="wip-pill">Placeholder WiP</button>
     </div>
 
   </div>
 
   <!-- ── SCREEN 9: Tomar Naam Ki — Word Cards ── -->
-  <div class="screen" id="screen-9">
+  <div class="screen lesson-screen" id="screen-9">
     <p id="sentence9-label" class="sentence-narrator"></p>
 
-    <div id="word-cards-row-9">
+    <div id="word-cards-row-9" class="cards-row">
       <div class="word-card inactive" id="card9-tomar">
         <div class="word-card-img-wrap">
           <img src="hattim-tomar.png" class="word-card-img" alt="">
@@ -1267,26 +1044,26 @@
       </div>
     </div>
 
-    <div id="center-pose-wrap-9">
-      <img id="center-pose-img-9" src="" alt="">
+    <div id="center-pose-wrap-9" class="center-pose-wrap">
+      <img id="center-pose-img-9" class="center-pose-img" src="" alt="">
     </div>
 
-    <div id="screen9-end-overlay">
-      <button id="screen9-end-wip-pill">Placeholder WiP</button>
+    <div id="screen9-end-overlay" class="end-overlay">
+      <button id="screen9-end-wip-pill" class="wip-pill">Placeholder WiP</button>
     </div>
 
   </div>
 
   <!-- ── SCREEN 10: Tomar Naam Ki — Word Recall ── -->
-  <div class="screen" id="screen-10">
-    <img id="screen10-pose" src="" alt="">
-    <div id="screen10-label"></div>
+  <div class="screen recall-screen" id="screen-10">
+    <img id="screen10-pose" class="recall-pose" src="" alt="">
+    <div id="screen10-label" class="recall-label"></div>
   </div>
 
   <!-- ── SCREEN 11: Tomar Naam Ki — Choose & Match Game ── -->
-  <div class="screen" id="screen-11">
+  <div class="screen lesson-screen" id="screen-11">
 
-    <div id="game-cards-row-11">
+    <div id="game-cards-row-11" class="cards-row">
       <div class="game-card" id="gc11-tomar">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill11-tomar" src="" alt="">
@@ -1307,20 +1084,20 @@
       </div>
     </div>
 
-    <div id="game-choices-row-11">
+    <div id="game-choices-row-11" class="choices-row">
       <button class="choice-btn" id="choice11-0"></button>
       <button class="choice-btn" id="choice11-1"></button>
       <button class="choice-btn" id="choice11-2"></button>
     </div>
 
-    <div id="screen11-end-overlay">
-      <button id="screen11-end-wip-pill">Placeholder WiP</button>
+    <div id="screen11-end-overlay" class="end-overlay">
+      <button id="screen11-end-wip-pill" class="wip-pill">Placeholder WiP</button>
     </div>
 
   </div>
 
   <!-- ── SCREEN 12: Level Complete ── -->
-  <div class="screen" id="screen-12">
+  <div class="screen recall-screen" id="screen-12">
     <img id="stars12" src="stars-celebration.png" alt="">
 
     <div class="hattim-lesson-wrap" id="hattimWaveWrap12">
@@ -1331,7 +1108,7 @@
       LEVEL COMPLETE
     </div>
 
-    <div id="screen12-btns">
+    <div id="screen12-btns" class="bottom-btns">
       <button class="circle-btn" id="btnPlayAgain12">
         <div class="circle">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1688,35 +1465,9 @@
   btnSkip.addEventListener('click', goToLesson1);
 
   // ══════════════════════════════
-  // SCREEN 3 → SCREEN 4 (lesson 1)
+  // SCREEN 3 → SCREEN 4 (lesson 1) — same transition as Skip
   // ══════════════════════════════
-  btnNext.addEventListener('click', () => {
-    playClick();
-    hideScreen(screenVideo);
-
-    setTimeout(() => {
-      showScreen(screenLesson1);
-      fadeIn(gameplayMusic, 0.35, 1500);
-
-      setTimeout(() => {
-        lessonWordart.classList.add('drop-in');
-
-        setTimeout(() => {
-          hattimLessonWrap.classList.add('visible');
-          hattimWaveVideo.play().catch(() => {});
-
-          setTimeout(() => {
-            btnLesson.classList.add('visible');
-
-            handTimer = setTimeout(() => {
-              handHint.classList.add('visible');
-            }, 12000);
-
-          }, 800);
-        }, 700);
-      }, 200);
-    }, 600);
-  });
+  btnNext.addEventListener('click', goToLesson1);
 
   // ── Lesson 1 pill → Friends screen (single handler, always active)
   btnLesson.addEventListener('click', () => {
@@ -1773,68 +1524,62 @@
     }, 500);
   });
 
-  // ── Screen 6: Word Cards demo sequence ──
-  function activateDemoCard(index) {
-    demoCards.forEach((c, i) => {
+  // ── Shared engine: word-cards demo sequence (screens 6 & 9) ──
+  function activateWordCard(cards, poseImg, index) {
+    cards.forEach((c, i) => {
       const el = document.getElementById(c.id);
       el.classList.toggle('active',   i === index);
       el.classList.toggle('inactive', i !== index);
     });
-    centerPoseImg.classList.add('fading');
+    poseImg.classList.add('fading');
     setTimeout(() => {
-      centerPoseImg.src = demoCards[index].img;
-      centerPoseImg.style.height = demoCards[index].centerHeight;
-      centerPoseImg.style.transform = demoCards[index].centerScale;
-      centerPoseImg.classList.remove('fading');
+      poseImg.src = cards[index].img;
+      poseImg.style.height = cards[index].centerHeight;
+      poseImg.style.transform = cards[index].centerScale;
+      poseImg.classList.remove('fading');
     }, 250);
   }
 
-  function resetDemoCards() {
-    demoCards.forEach(c => {
+  function resetWordCards(cards) {
+    cards.forEach(c => {
       const el = document.getElementById(c.id);
       el.classList.remove('active');
       el.classList.add('inactive');
     });
   }
 
-  function runDemoRound(onComplete) {
+  function runWordCardRound(cards, voices, poseImg, onComplete) {
     let step = 0;
     function next() {
-      if (step >= demoCards.length) { onComplete(); return; }
+      if (step >= cards.length) { onComplete(); return; }
       const i = step;
       step++;
-      activateDemoCard(i);
-      playVoice(cardVoices[i], () => {
+      activateWordCard(cards, poseImg, i);
+      playVoice(voices[i], () => {
         setTimeout(next, 1200);
       }, 5000);
     }
     next();
   }
 
-  function startSentenceDemo() {
-    resetDemoCards();
-    playVoice(voiceLessonIntro, () => {
-      sentenceLabel.textContent = 'Listen how it is said';
+  // Listen round → repeat round → hand off. cfg: cards, voices, poseImg,
+  // labelEl, introVoice, repeatVoice, endVoice, onEnd
+  function runWordCardsSequence(cfg) {
+    resetWordCards(cfg.cards);
+    playVoice(cfg.introVoice, () => {
+      cfg.labelEl.textContent = 'Listen how it is said';
       setTimeout(() => {
-        runDemoRound(() => {
-          resetDemoCards();
+        runWordCardRound(cfg.cards, cfg.voices, cfg.poseImg, () => {
+          resetWordCards(cfg.cards);
           playVoice(sfxComplete, () => {
-            playVoice(voiceNowRepeat, () => {
-              sentenceLabel.textContent = 'Now repeat with me';
+            playVoice(cfg.repeatVoice, () => {
+              cfg.labelEl.textContent = 'Now repeat with me';
               setTimeout(() => {
-                runDemoRound(() => {
-                  resetDemoCards();
-                  sentenceLabel.textContent = '';
+                runWordCardRound(cfg.cards, cfg.voices, cfg.poseImg, () => {
+                  resetWordCards(cfg.cards);
+                  cfg.labelEl.textContent = '';
                   playVoice(sfxComplete, () => {
-                    playVoice(voiceNextScreen, () => {
-                      setTimeout(() => {
-                        hideScreen(screenSentence);
-                        setTimeout(() => {
-                          showScreen(screen7);
-                          startScreen7();
-                        }, 750);
-                      }, 1200);
-                    });
+                    playVoice(cfg.endVoice, cfg.onEnd);
                   });
                 });
               }, 500);
@@ -1845,250 +1590,215 @@
     });
   }
 
-  // ── Screen 9: Tomar Naam Ki — Word Cards demo sequence ──
-  function activateDemoCard9(index) {
-    demoCards9.forEach((c, i) => {
-      const el = document.getElementById(c.id);
-      el.classList.toggle('active',   i === index);
-      el.classList.toggle('inactive', i !== index);
-    });
-    centerPoseImg9.classList.add('fading');
-    setTimeout(() => {
-      centerPoseImg9.src = demoCards9[index].img;
-      centerPoseImg9.style.height = demoCards9[index].centerHeight;
-      centerPoseImg9.style.transform = demoCards9[index].centerScale;
-      centerPoseImg9.classList.remove('fading');
-    }, 250);
-  }
-
-  function resetDemoCards9() {
-    demoCards9.forEach(c => {
-      const el = document.getElementById(c.id);
-      el.classList.remove('active');
-      el.classList.add('inactive');
+  // Screen 6: Amar Naam Hattim
+  function startSentenceDemo() {
+    runWordCardsSequence({
+      cards: demoCards,
+      voices: cardVoices,
+      poseImg: centerPoseImg,
+      labelEl: sentenceLabel,
+      introVoice: voiceLessonIntro,
+      repeatVoice: voiceNowRepeat,
+      endVoice: voiceNextScreen,
+      onEnd: () => {
+        setTimeout(() => {
+          hideScreen(screenSentence);
+          setTimeout(() => {
+            showScreen(screen7);
+            startScreen7();
+          }, 750);
+        }, 1200);
+      }
     });
   }
 
-  function runDemoRound9(onComplete) {
-    let step = 0;
-    function next() {
-      if (step >= demoCards9.length) { onComplete(); return; }
-      const i = step;
-      step++;
-      activateDemoCard9(i);
-      playVoice(cardVoices9[i], () => {
-        setTimeout(next, 1200);
-      }, 5000);
-    }
-    next();
-  }
-
+  // Screen 9: Tomar Naam Ki
   function startScreen9() {
-    resetDemoCards9();
     document.getElementById('word-cards-row-9').style.opacity = '';
     centerPoseImg9.style.opacity = '';
     screen9EndOverlay.classList.remove('visible');
-    playVoice(voiceAgainThreeWords, () => {
-      sentence9Label.textContent = 'Listen how it is said';
-      setTimeout(() => {
-        runDemoRound9(() => {
-          resetDemoCards9();
-          playVoice(sfxComplete, () => {
-            playVoice(voiceOneMoreTime, () => {
-              sentence9Label.textContent = 'Now repeat with me';
-              setTimeout(() => {
-                runDemoRound9(() => {
-                  resetDemoCards9();
-                  sentence9Label.textContent = '';
-                  playVoice(sfxComplete, () => {
-                    playVoice(voiceYourTurnAgain, () => {
-                      document.getElementById('word-cards-row-9').style.opacity = '0';
-                      centerPoseImg9.style.opacity = '0';
-                      setTimeout(() => {
-                        hideScreen(screen9);
-                        setTimeout(() => {
-                          showScreen(screen10);
-                          startScreen10();
-                        }, 750);
-                      }, 1200);
-                    });
-                  });
-                });
-              }, 500);
-            });
-          });
-        });
-      }, 500);
+    runWordCardsSequence({
+      cards: demoCards9,
+      voices: cardVoices9,
+      poseImg: centerPoseImg9,
+      labelEl: sentence9Label,
+      introVoice: voiceAgainThreeWords,
+      repeatVoice: voiceOneMoreTime,
+      endVoice: voiceYourTurnAgain,
+      onEnd: () => {
+        document.getElementById('word-cards-row-9').style.opacity = '0';
+        centerPoseImg9.style.opacity = '0';
+        setTimeout(() => {
+          hideScreen(screen9);
+          setTimeout(() => {
+            showScreen(screen10);
+            startScreen10();
+          }, 750);
+        }, 1200);
+      }
     });
   }
 
   screen9EndWipPill.addEventListener('click', () => { location.reload(); });
 
-  // ── Screen 10: Tomar Naam Ki — Word Recall ──
-  const screen10Poses = [
-    { img: 'hattim-tomar.png',   label: 'তোমার', scale: 1.0, audio: voiceTomarB },
-    { img: 'hattim-name-is.png', label: 'নাম',    scale: 1.0, audio: voiceNaamB  },
-    { img: 'hattim-ki.png',      label: 'কি',     scale: 1.0, audio: voiceKiB    }
-  ];
-
-  function showScreen10Pose(poseData, onDone) {
-    screen10Pose.src = poseData.img;
-    screen10Pose.style.transform = 'scale(' + poseData.scale + ')';
-    screen10Pose.classList.add('visible');
+  // ── Shared engine: word recall sequence (screens 7 & 10) ──
+  function showRecallPose(poseEl, labelEl, poseData, onDone) {
+    poseEl.src = poseData.img;
+    poseEl.style.transform = 'scale(' + poseData.scale + ')';
+    poseEl.classList.add('visible');
     setTimeout(() => {
-      screen10Label.textContent = poseData.label;
-      screen10Label.classList.add('visible');
+      labelEl.textContent = poseData.label;
+      labelEl.classList.add('visible');
       playVoice(poseData.audio, () => {
         setTimeout(() => {
-          screen10Pose.classList.remove('visible');
-          screen10Label.classList.remove('visible');
+          poseEl.classList.remove('visible');
+          labelEl.classList.remove('visible');
           setTimeout(onDone, 600);
         }, 800);
       });
     }, 300);
   }
 
-  function startScreen10() {
-    playVoice(voiceOnceAgainThreeWords, () => {
+  // Intro voice → each pose in turn → hand off. cfg: introVoice, poses,
+  // poseEl, labelEl, onEnd
+  function runRecallSequence(cfg) {
+    playVoice(cfg.introVoice, () => {
       setTimeout(() => {
         let step = 0;
         function nextPose() {
-          if (step >= screen10Poses.length) {
-            setTimeout(() => {
-              hideScreen(screen10);
-              setTimeout(() => { showScreen(screen11); startScreen11(); }, 750);
-            }, 800);
+          if (step >= cfg.poses.length) {
+            setTimeout(cfg.onEnd, 800);
             return;
           }
-          showScreen10Pose(screen10Poses[step++], nextPose);
+          showRecallPose(cfg.poseEl, cfg.labelEl, cfg.poses[step++], nextPose);
         }
         nextPose();
       }, 500);
     });
   }
 
-  // ── Screen 7: Word Recall ──
+  // Screen 7: Amar Naam Hattim recall
   const screen7Poses = [
     { img: 'hattim-my.png',        label: 'আমার',   scale: 1.3, audio: voiceAmarB   },
     { img: 'hattim-name-is.png',   label: 'নাম',    scale: 1.0, audio: voiceNaamB   },
     { img: 'hattim-name-card.png', label: 'হাটটিম', scale: 1.2, audio: voiceHattimB }
   ];
 
-  function showScreen7Pose(poseData, onDone) {
-    screen7Pose.src = poseData.img;
-    screen7Pose.style.transform = 'scale(' + poseData.scale + ')';
-    screen7Pose.classList.add('visible');
-    setTimeout(() => {
-      screen7Label.textContent = poseData.label;
-      screen7Label.classList.add('visible');
-      playVoice(poseData.audio, () => {
-        setTimeout(() => {
-          screen7Pose.classList.remove('visible');
-          screen7Label.classList.remove('visible');
-          setTimeout(onDone, 600);
-        }, 800);
-      });
-    }, 300);
-  }
-
   function startScreen7() {
-    playVoice(voiceRemember, () => {
-      setTimeout(() => {
-        let step = 0;
-        function nextPose() {
-          if (step >= screen7Poses.length) {
-            setTimeout(() => {
-              hideScreen(screen7);
-              setTimeout(() => { showScreen(screen8); startScreen8(); }, 500);
-            }, 800);
-            return;
-          }
-          showScreen7Pose(screen7Poses[step++], nextPose);
-        }
-        nextPose();
-      }, 500);
+    runRecallSequence({
+      introVoice: voiceRemember,
+      poses: screen7Poses,
+      poseEl: screen7Pose,
+      labelEl: screen7Label,
+      onEnd: () => {
+        hideScreen(screen7);
+        setTimeout(() => { showScreen(screen8); game8.start(); }, 500);
+      }
     });
   }
 
-  // ── Screen 8: Choose & Match Game ──
-
-  const gameData = [
-    { id: 'gc-amar',   fillId: 'gcfill-amar',   img: 'hattim-my.png',        voice: voiceAmarB,   scale: 1.3, cover: true  },
-    { id: 'gc-naam',   fillId: 'gcfill-naam',   img: 'hattim-name-is.png',   voice: voiceNaamB,   scale: 1.0, cover: false },
-    { id: 'gc-hattim', fillId: 'gcfill-hattim', img: 'hattim-name-card.png', voice: voiceHattimB, scale: 1.2, cover: false }
+  // Screen 10: Tomar Naam Ki recall
+  const screen10Poses = [
+    { img: 'hattim-tomar.png',   label: 'তোমার', scale: 1.0, audio: voiceTomarB },
+    { img: 'hattim-name-is.png', label: 'নাম',    scale: 1.0, audio: voiceNaamB  },
+    { img: 'hattim-ki.png',      label: 'কি',     scale: 1.0, audio: voiceKiB    }
   ];
 
+  function startScreen10() {
+    runRecallSequence({
+      introVoice: voiceOnceAgainThreeWords,
+      poses: screen10Poses,
+      poseEl: screen10Pose,
+      labelEl: screen10Label,
+      onEnd: () => {
+        hideScreen(screen10);
+        setTimeout(() => { showScreen(screen11); game11.start(); }, 750);
+      }
+    });
+  }
+
+  // ── Shared engine: choose & match game (screens 8 & 11) ──
   // Round 1: in order [0,1,2]. Round 2: shuffled [1,2,0].
   const gameRounds = [[0, 1, 2], [1, 2, 0]];
 
-  function resetGameCards() {
-    gameData.forEach(d => {
-      const card = document.getElementById(d.id);
-      card.classList.remove('glowing', 'wrong');
-      const img = document.getElementById(d.fillId);
-      img.classList.remove('visible');
-      img.src = '';
-    });
-  }
-
-  function setCardGlow(cardIndex) {
-    gameData.forEach((d, i) => {
-      const card = document.getElementById(d.id);
-      card.classList.remove('glowing', 'wrong');
-      if (i === cardIndex) card.classList.add('glowing');
-    });
-  }
-
-  function flashWrong(cardIndex, onDone) {
-    const card = document.getElementById(gameData[cardIndex].id);
-    card.classList.remove('glowing');
-    card.classList.add('wrong');
-    sfxWrong.currentTime = 0;
-    sfxWrong.play();
-    setTimeout(() => {
-      card.classList.remove('wrong');
-      card.classList.add('glowing');
-      onDone();
-    }, 800);
-  }
-
-  function fillCard(cardIndex, onDone) {
-    const d = gameData[cardIndex];
-    const img = document.getElementById(d.fillId);
-    img.src = d.img;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      img.classList.add('visible');
-    }));
-    const card = document.getElementById(d.id);
-    card.classList.remove('glowing', 'wrong');
-    playVoice(d.voice, onDone, 4000);
-  }
-
-  function renderChoices(choiceOrder) {
-    choiceBtns.forEach((btn, i) => {
-      const charIndex = choiceOrder[i];
-      const d = gameData[charIndex];
-      btn.innerHTML = '';
-      const img = document.createElement('img');
-      img.src = d.img;
-      img.style.transform = 'scale(' + d.scale + ')';
-      img.style.transformOrigin = 'center bottom';
-      if (d.cover) img.style.objectFit = 'cover';
-      btn.appendChild(img);
-      btn.dataset.charIndex = charIndex;
-      btn.classList.remove('fading-out');
-      btn.disabled = false;
-      btn.style.opacity = '';
-      btn.style.transform = '';
-    });
-    gameChoicesRow.classList.add('visible');
-  }
-
-  function runRound(choiceOrder, currentCardIndex, onComplete) {
-    renderChoices(choiceOrder);
-    setCardGlow(currentCardIndex);
-
+  // cfg: data, choiceBtns, choicesRow, cardsRowId, endOverlay,
+  //      introVoice, mixVoice, praiseVoice, endVoice, onEnd
+  function createMatchGame(cfg) {
     let locked = false;
+    let roundActive = false;
+    let currentCardIndex = 0;
+    let onRoundComplete = null;
+
+    // Listeners attached once; rounds just update state (no cloneNode hack)
+    cfg.choiceBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!roundActive) return;
+        handleChoice(btn, parseInt(btn.dataset.charIndex));
+      });
+    });
+
+    function resetCards() {
+      cfg.data.forEach(d => {
+        const card = document.getElementById(d.id);
+        card.classList.remove('glowing', 'wrong');
+        const img = document.getElementById(d.fillId);
+        img.classList.remove('visible');
+        img.src = '';
+      });
+    }
+
+    function setCardGlow(cardIndex) {
+      cfg.data.forEach((d, i) => {
+        const card = document.getElementById(d.id);
+        card.classList.remove('glowing', 'wrong');
+        if (i === cardIndex) card.classList.add('glowing');
+      });
+    }
+
+    function flashWrong(cardIndex, onDone) {
+      const card = document.getElementById(cfg.data[cardIndex].id);
+      card.classList.remove('glowing');
+      card.classList.add('wrong');
+      sfxWrong.currentTime = 0;
+      sfxWrong.play().catch(() => {});
+      setTimeout(() => {
+        card.classList.remove('wrong');
+        card.classList.add('glowing');
+        onDone();
+      }, 800);
+    }
+
+    function fillCard(cardIndex, onDone) {
+      const d = cfg.data[cardIndex];
+      const img = document.getElementById(d.fillId);
+      img.src = d.img;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        img.classList.add('visible');
+      }));
+      const card = document.getElementById(d.id);
+      card.classList.remove('glowing', 'wrong');
+      playVoice(d.voice, onDone, 4000);
+    }
+
+    function renderChoices(choiceOrder) {
+      cfg.choiceBtns.forEach((btn, i) => {
+        const charIndex = choiceOrder[i];
+        const d = cfg.data[charIndex];
+        btn.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = d.img;
+        img.style.transform = 'scale(' + d.scale + ')';
+        img.style.transformOrigin = 'center bottom';
+        if (d.cover) img.style.objectFit = 'cover';
+        btn.appendChild(img);
+        btn.dataset.charIndex = charIndex;
+        btn.classList.remove('fading-out');
+        btn.disabled = false;
+        btn.style.opacity = '';
+        btn.style.transform = '';
+      });
+      cfg.choicesRow.classList.add('visible');
+    }
 
     function handleChoice(btn, charIndex) {
       if (locked) return;
@@ -2101,10 +1811,11 @@
           fillCard(currentCardIndex, () => {
             locked = false;
             currentCardIndex++;
-            if (currentCardIndex < gameData.length) {
+            if (currentCardIndex < cfg.data.length) {
               setCardGlow(currentCardIndex);
             } else {
-              onComplete();
+              roundActive = false;
+              onRoundComplete();
             }
           });
         }, 350);
@@ -2115,248 +1826,122 @@
       }
     }
 
-    choiceBtns.forEach(btn => {
-      // Clone to remove old listeners
-      const fresh = btn.cloneNode(true);
-      btn.parentNode.replaceChild(fresh, btn);
-      choiceBtns[parseInt(fresh.id.split('-')[1])] = fresh;
-      fresh.addEventListener('click', () => {
-        handleChoice(fresh, parseInt(fresh.dataset.charIndex));
-      });
-    });
+    function runRound(choiceOrder, onComplete) {
+      renderChoices(choiceOrder);
+      currentCardIndex = 0;
+      onRoundComplete = onComplete;
+      locked = false;
+      roundActive = true;
+      setCardGlow(currentCardIndex);
+    }
 
-    setCardGlow(currentCardIndex);
+    function clearChoices() {
+      cfg.choiceBtns.forEach(btn => {
+        btn.classList.add('fading-out');
+        btn.disabled = true;
+      });
+      setTimeout(() => {
+        cfg.choicesRow.classList.remove('visible');
+        cfg.choiceBtns.forEach(btn => {
+          btn.classList.remove('fading-out');
+          btn.innerHTML = '';
+        });
+      }, 450);
+    }
+
+    function start() {
+      resetCards();
+      document.getElementById(cfg.cardsRowId).style.opacity = '';
+      cfg.choicesRow.classList.remove('visible');
+      cfg.endOverlay.classList.remove('visible');
+
+      playVoice(cfg.introVoice, () => {
+        // Round 1 — in order
+        runRound(gameRounds[0], () => {
+          clearChoices();
+          setTimeout(() => {
+            playVoice(sfxComplete, () => {
+              playVoice(cfg.mixVoice, () => {
+                // Clear card images for round 2
+                resetCards();
+                setTimeout(() => {
+                  // Round 2 — shuffled order
+                  runRound(gameRounds[1], () => {
+                    clearChoices();
+                    setTimeout(() => {
+                      playVoice(cfg.praiseVoice, () => {
+                        playVoice(cfg.endVoice, () => {
+                          // Fade out cards, hand off to next screen
+                          document.getElementById(cfg.cardsRowId).style.opacity = '0';
+                          setTimeout(cfg.onEnd, 700);
+                        }, 4000);
+                      }, 3000);
+                    }, 400);
+                  });
+                }, 500);
+              }, 5000);
+            });
+          }, 400);
+        });
+      }, 6000);
+    }
+
+    return { start };
   }
 
-  function clearChoices() {
-    choiceBtns.forEach(btn => {
-      btn.classList.add('fading-out');
-      btn.disabled = true;
-    });
-    setTimeout(() => {
-      gameChoicesRow.classList.remove('visible');
-      choiceBtns.forEach(btn => {
-        btn.classList.remove('fading-out');
-        btn.innerHTML = '';
-      });
-    }, 450);
-  }
+  // Screen 8: Amar Naam Hattim game
+  const gameData = [
+    { id: 'gc-amar',   fillId: 'gcfill-amar',   img: 'hattim-my.png',        voice: voiceAmarB,   scale: 1.3, cover: true  },
+    { id: 'gc-naam',   fillId: 'gcfill-naam',   img: 'hattim-name-is.png',   voice: voiceNaamB,   scale: 1.0, cover: false },
+    { id: 'gc-hattim', fillId: 'gcfill-hattim', img: 'hattim-name-card.png', voice: voiceHattimB, scale: 1.2, cover: false }
+  ];
 
-  function startScreen8() {
-    resetGameCards();
-    document.getElementById('game-cards-row').style.opacity = '';
-    gameChoicesRow.classList.remove('visible');
-    gameEndOverlay.classList.remove('visible');
-
-    playVoice(voiceChoose, () => {
-      // Round 1 — in order
-      runRound(gameRounds[0], 0, () => {
-        // Round 1 done: clear cards, play sfx + mix voice, then round 2
-        clearChoices();
-        setTimeout(() => {
-          playVoice(sfxComplete, () => {
-            playVoice(voiceMix, () => {
-              // Clear card images for round 2
-              resetGameCards();
-              setTimeout(() => {
-                // Round 2 — shuffled order
-                runRound(gameRounds[1], 0, () => {
-                  clearChoices();
-                  setTimeout(() => {
-                    playVoice(voiceGood, () => {
-                      playVoice(voiceYourName, () => {
-                        // Fade out cards, hand off to Screen 9
-                        document.getElementById('game-cards-row').style.opacity = '0';
-                        setTimeout(() => {
-                          hideScreen(screen8);
-                          setTimeout(() => {
-                            showScreen(screen9);
-                            startScreen9();
-                          }, 750);
-                        }, 700);
-                      }, 4000);
-                    }, 3000);
-                  }, 400);
-                });
-              }, 500);
-            }, 5000);
-          });
-        }, 400);
-      });
-    }, 6000);
-  }
+  const game8 = createMatchGame({
+    data: gameData,
+    choiceBtns: choiceBtns,
+    choicesRow: gameChoicesRow,
+    cardsRowId: 'game-cards-row',
+    endOverlay: gameEndOverlay,
+    introVoice: voiceChoose,
+    mixVoice: voiceMix,
+    praiseVoice: voiceGood,
+    endVoice: voiceYourName,
+    onEnd: () => {
+      hideScreen(screen8);
+      setTimeout(() => {
+        showScreen(screen9);
+        startScreen9();
+      }, 750);
+    }
+  });
 
   gameEndWipPill.addEventListener('click', () => { location.reload(); });
 
   // ── Screen 11: Tomar Naam Ki — Choose & Match Game ──
-
   const gameData11 = [
     { id: 'gc11-tomar', fillId: 'gcfill11-tomar', img: 'hattim-tomar.png',   voice: voiceTomarB, scale: 1.0, cover: false },
     { id: 'gc11-naam',  fillId: 'gcfill11-naam',  img: 'hattim-name-is.png', voice: voiceNaamB,  scale: 1.0, cover: false },
     { id: 'gc11-ki',    fillId: 'gcfill11-ki',    img: 'hattim-ki.png',      voice: voiceKiB,    scale: 1.0, cover: false }
   ];
 
-  function resetGameCards11() {
-    gameData11.forEach(d => {
-      const card = document.getElementById(d.id);
-      card.classList.remove('glowing', 'wrong');
-      const img = document.getElementById(d.fillId);
-      img.classList.remove('visible');
-      img.src = '';
-    });
-  }
-
-  function setCardGlow11(cardIndex) {
-    gameData11.forEach((d, i) => {
-      const card = document.getElementById(d.id);
-      card.classList.remove('glowing', 'wrong');
-      if (i === cardIndex) card.classList.add('glowing');
-    });
-  }
-
-  function flashWrong11(cardIndex, onDone) {
-    const card = document.getElementById(gameData11[cardIndex].id);
-    card.classList.remove('glowing');
-    card.classList.add('wrong');
-    sfxWrong.currentTime = 0;
-    sfxWrong.play();
-    setTimeout(() => {
-      card.classList.remove('wrong');
-      card.classList.add('glowing');
-      onDone();
-    }, 800);
-  }
-
-  function fillCard11(cardIndex, onDone) {
-    const d = gameData11[cardIndex];
-    const img = document.getElementById(d.fillId);
-    img.src = d.img;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      img.classList.add('visible');
-    }));
-    const card = document.getElementById(d.id);
-    card.classList.remove('glowing', 'wrong');
-    playVoice(d.voice, onDone, 4000);
-  }
-
-  function renderChoices11(choiceOrder) {
-    choiceBtns11.forEach((btn, i) => {
-      const charIndex = choiceOrder[i];
-      const d = gameData11[charIndex];
-      btn.innerHTML = '';
-      const img = document.createElement('img');
-      img.src = d.img;
-      img.style.transform = 'scale(' + d.scale + ')';
-      img.style.transformOrigin = 'center bottom';
-      if (d.cover) img.style.objectFit = 'cover';
-      btn.appendChild(img);
-      btn.dataset.charIndex = charIndex;
-      btn.classList.remove('fading-out');
-      btn.disabled = false;
-      btn.style.opacity = '';
-      btn.style.transform = '';
-    });
-    gameChoicesRow11.classList.add('visible');
-  }
-
-  function runRound11(choiceOrder, currentCardIndex, onComplete) {
-    renderChoices11(choiceOrder);
-    setCardGlow11(currentCardIndex);
-
-    let locked = false;
-
-    function handleChoice(btn, charIndex) {
-      if (locked) return;
-      if (charIndex === currentCardIndex) {
-        // Correct
-        locked = true;
-        btn.classList.add('fading-out');
-        btn.disabled = true;
-        setTimeout(() => {
-          fillCard11(currentCardIndex, () => {
-            locked = false;
-            currentCardIndex++;
-            if (currentCardIndex < gameData11.length) {
-              setCardGlow11(currentCardIndex);
-            } else {
-              onComplete();
-            }
-          });
-        }, 350);
-      } else {
-        // Wrong — briefly lock buttons during flash
-        locked = true;
-        flashWrong11(currentCardIndex, () => { locked = false; });
-      }
+  const game11 = createMatchGame({
+    data: gameData11,
+    choiceBtns: choiceBtns11,
+    choicesRow: gameChoicesRow11,
+    cardsRowId: 'game-cards-row-11',
+    endOverlay: screen11EndOverlay,
+    introVoice: voiceJoinAgain,
+    mixVoice: voiceAgainMix,
+    praiseVoice: voiceGoodJob,
+    endVoice: voiceIsntThatWonderful,
+    onEnd: () => {
+      hideScreen(screen11);
+      setTimeout(() => {
+        showScreen(screen12);
+        startScreen12();
+      }, 750);
     }
-
-    choiceBtns11.forEach(btn => {
-      // Clone to remove old listeners
-      const fresh = btn.cloneNode(true);
-      btn.parentNode.replaceChild(fresh, btn);
-      choiceBtns11[parseInt(fresh.id.split('-')[1])] = fresh;
-      fresh.addEventListener('click', () => {
-        handleChoice(fresh, parseInt(fresh.dataset.charIndex));
-      });
-    });
-
-    setCardGlow11(currentCardIndex);
-  }
-
-  function clearChoices11() {
-    choiceBtns11.forEach(btn => {
-      btn.classList.add('fading-out');
-      btn.disabled = true;
-    });
-    setTimeout(() => {
-      gameChoicesRow11.classList.remove('visible');
-      choiceBtns11.forEach(btn => {
-        btn.classList.remove('fading-out');
-        btn.innerHTML = '';
-      });
-    }, 450);
-  }
-
-  function startScreen11() {
-    resetGameCards11();
-    document.getElementById('game-cards-row-11').style.opacity = '';
-    gameChoicesRow11.classList.remove('visible');
-    screen11EndOverlay.classList.remove('visible');
-
-    playVoice(voiceJoinAgain, () => {
-      // Round 1 — in order
-      runRound11(gameRounds[0], 0, () => {
-        clearChoices11();
-        setTimeout(() => {
-          playVoice(sfxComplete, () => {
-            playVoice(voiceAgainMix, () => {
-              resetGameCards11();
-              setTimeout(() => {
-                // Round 2 — shuffled order
-                runRound11(gameRounds[1], 0, () => {
-                  clearChoices11();
-                  setTimeout(() => {
-                    playVoice(voiceGoodJob, () => {
-                      playVoice(voiceIsntThatWonderful, () => {
-                        document.getElementById('game-cards-row-11').style.opacity = '0';
-                        setTimeout(() => {
-                          hideScreen(screen11);
-                          setTimeout(() => {
-                            showScreen(screen12);
-                            startScreen12();
-                          }, 750);
-                        }, 700);
-                      }, 4000);
-                    }, 3000);
-                  }, 400);
-                });
-              }, 500);
-            }, 5000);
-          });
-        }, 400);
-      });
-    }, 6000);
-  }
+  });
 
   screen11EndWipPill.addEventListener('click', () => { location.reload(); });
 
