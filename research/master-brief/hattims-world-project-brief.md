@@ -143,6 +143,14 @@ Tier 3 is the investor "wow" feature — even if partially scripted initially, i
 - **Never touch earlier positioned elements** when adding new screens
 - Design-first in Keynote → export PNG → Claude builds one screen at a time from the PNG
 
+> **Update (July 2026):** Sajid approved a one-off efficiency & polish refactor that
+> consciously superseded the append-only rule. Screens 6–11 now share three
+> parameterized engines (word cards, recall, match game) plus shared CSS classes;
+> new lessons should be added as **config objects reusing those engines**, not by
+> copy-pasting screen blocks. Full 12-screen flow was browser-verified after the
+> refactor. Typography is now brand Quicksand (local font); first-load payload cut
+> from ~50MB to ~6MB via lazy audio/video loading and image resizing.
+
 ---
 
 ## 8. Art Direction & UI
