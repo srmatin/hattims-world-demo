@@ -31,24 +31,34 @@
     html, body {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: #000;
+      /* Sky blue behind everything so transitions never pass through black */
+      background: radial-gradient(ellipse at 50% 45%, var(--blue-300) 0%, var(--blue-500) 100%);
     }
 
-    /* ── Shared screen base ── */
+    /* ── Shared screen base — cartoon iris wipe ── */
     .screen {
       position: absolute; inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      opacity: 0;
+      clip-path: circle(0% at 50% 50%);
       pointer-events: none;
-      transition: opacity 0.7s ease;
+      /* Exit: iris closes quickly */
+      transition: clip-path 0.45s cubic-bezier(0.55, 0, 0.75, 0.4);
     }
 
     .screen.active {
-      opacity: 1;
+      /* 75% of the clip-path reference always reaches past the corners */
+      clip-path: circle(75% at 50% 50%);
       pointer-events: all;
+      /* Enter: iris opens a touch slower, easing out */
+      transition: clip-path 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Instant cut — most transitions; only story-beat handoffs use the iris */
+    .screen.no-anim {
+      transition: none !important;
     }
 
     /* ── Shared orange pill button ── */
@@ -549,6 +559,7 @@
       to   { transform: translateY(0); }
     }
     .word-card {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -562,9 +573,11 @@
       transition: border-color 0.25s ease, filter 0.3s ease, opacity 0.3s ease;
     }
     .word-card.active {
-      border-color: #F5A623;
+      /* Golden ring sweep replaces the old flat orange border */
+      border-color: transparent;
       filter: none;
       opacity: 1;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 6px 26px 2px rgba(249,201,35,0.4);
     }
     .word-card.inactive {
       border-color: transparent;
@@ -670,6 +683,7 @@
     #screen-8 { z-index: 14; }
 
     .game-card {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -682,35 +696,96 @@
       transition: box-shadow 0.25s ease;
     }
 
+    /* Golden ring that sweeps around the active card */
+    @property --ring-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
     .game-card.glowing {
-      animation: cardGlow 1.2s ease-in-out infinite;
+      /* Steady warm glow doubles as fallback where @property is unsupported */
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 6px 26px 2px rgba(249,201,35,0.4);
     }
 
-    .game-card.wrong {
-      animation: wrongFlash 0.75s ease-in-out forwards, cardShake 0.45s var(--ease-out);
+    .game-card.glowing::before,
+    .word-card.active::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 25px;
+      z-index: -1;
+      background: conic-gradient(from var(--ring-angle),
+        rgba(249,201,35,0)   0deg,
+        rgba(249,201,35,0) 250deg,
+        #F9C923            300deg,
+        #FFF6C8            330deg,
+        #F9C923            344deg,
+        rgba(249,201,35,0) 360deg);
+      /* Mask to the outer band only, so the sweep never paints across the card face */
+      padding: 6px;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      animation: ringSweep 1.8s linear infinite;
     }
 
-    /* Gentle side-to-side "no" shake, transform-only */
+    @keyframes ringSweep {
+      to { --ring-angle: 360deg; }
+    }
+
+    /* Red halo pulses out twice from behind the card on a wrong pick */
+    .game-card.wrong::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 24px;
+      z-index: -1;
+      background: radial-gradient(ellipse at center,
+        rgba(232,57,42,0.8),
+        rgba(232,57,42,0.4) 70%,
+        rgba(232,57,42,0) 100%);
+      opacity: 0;
+      animation: redPulse 0.45s ease-out 2;
+    }
+
+    @keyframes redPulse {
+      0%   { transform: scale(0.96); opacity: 0.9; }
+      100% { transform: scale(1.16); opacity: 0; }
+    }
+
+    /* Light sweep across the card as the character lands in it / the card lights up */
+    .game-card::after,
+    .word-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(115deg,
+        transparent 32%, rgba(255,255,255,0.75) 50%, transparent 68%) no-repeat;
+      background-size: 240% 100%;
+      background-position: 140% 0; /* gradient parked off-canvas = invisible */
+      pointer-events: none;
+    }
+
+    .game-card.shimmer::after,
+    .word-card.shimmer::after {
+      animation: cardShimmer 0.8s ease-out;
+    }
+
+    @keyframes cardShimmer {
+      from { background-position: 140% 0; }
+      to   { background-position: -40% 0; }
+    }
+
+    /* Gentle side-to-side "no" shake, transform-only (also used by choice buttons) */
     @keyframes cardShake {
       0%   { transform: translateX(0); }
       25%  { transform: translateX(-7px); }
       50%  { transform: translateX(6px); }
       75%  { transform: translateX(-4px); }
       100% { transform: translateX(0); }
-    }
-
-    @keyframes cardGlow {
-      0%, 100% { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 10px 30px 6px rgba(247,148,29,0.55); }
-      50%       { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 14px 40px 10px rgba(247,148,29,0.85); }
-    }
-
-    @keyframes wrongFlash {
-      0%   { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 10px 30px 6px rgba(247,148,29,0.55); }
-      20%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 12px 36px 10px rgba(220,50,50,0.9); }
-      40%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 8px 20px 4px rgba(220,50,50,0.3); }
-      60%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 12px 36px 10px rgba(220,50,50,0.9); }
-      80%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 8px 20px 4px rgba(220,50,50,0.3); }
-      100% { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 10px 30px 6px rgba(247,148,29,0.55); }
     }
 
     .game-card-fill {
@@ -957,7 +1032,7 @@
       transform: scale(1.35);
     }
 
-    /* ── Hattim cheer-up reaction (wrong answers) ── */
+    /* ── Hattim celebration pop-up (matching round complete) ── */
     #hattim-reaction {
       position: fixed;
       bottom: 2vh;
@@ -988,6 +1063,14 @@
 
     /* ── Reduced motion: stop loops and movement, keep the fades that convey state ── */
     @media (prefers-reduced-motion: reduce) {
+      /* Iris wipe becomes a plain crossfade */
+      .screen {
+        clip-path: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .screen.active { opacity: 1; }
+
       .egg-wrap img,
       .tap-hint,
       .hand-svg,
@@ -997,6 +1080,15 @@
       .game-card.wrong,
       .game-card.glowing {
         animation: none !important;
+      }
+
+      /* Ring sweep, red pulse and shimmer are motion-only — remove, shadows below carry the state */
+      .game-card.glowing::before,
+      .game-card.wrong::before,
+      .game-card.shimmer::after,
+      .word-card.active::before,
+      .word-card.shimmer::after {
+        content: none;
       }
       /* Glow loop replaced by a steady highlight so the target card stays obvious */
       .game-card.glowing {
@@ -1297,7 +1389,7 @@
   <span class="dot"></span><span class="dot"></span><span class="dot"></span>
 </div>
 
-<!-- Hattim cheer-up reaction on wrong answers -->
+<!-- Hattim celebration pop-up when a matching round completes -->
 <div id="hattim-reaction">
   <video id="hattimReactionVideo" src="anim-cheerup.webm" muted playsinline preload="none"></video>
 </div>
@@ -1477,11 +1569,14 @@
   let handTimer = null;
 
   // ── Helpers ──
-  function showScreen(el) {
+  // mode: 'cut' (default) switches instantly; 'iris' plays the circle wipe
+  function showScreen(el, mode = 'cut') {
+    el.classList.toggle('no-anim', mode !== 'iris');
     el.classList.add('active');
   }
 
-  function hideScreen(el) {
+  function hideScreen(el, mode = 'cut') {
+    el.classList.toggle('no-anim', mode !== 'iris');
     el.classList.remove('active');
     // Stop videos once the fade-out finishes (hidden loops drain tablet battery)
     setTimeout(() => {
@@ -1517,21 +1612,22 @@
     lessonProgress.classList.remove('visible');
   }
 
-  // ── Hattim cheer-up reaction on wrong answers (throttled) ──
+  // ── Hattim celebration pop-up when a matching round's 3 words are done ──
   const hattimReaction      = document.getElementById('hattim-reaction');
   const hattimReactionVideo = document.getElementById('hattimReactionVideo');
-  let lastReactionAt = 0;
 
-  function hattimWrongReaction() {
-    const now = Date.now();
-    if (now - lastReactionAt < 8000) return;
-    lastReactionAt = now;
+  let celebrationHideTimer = null;
+
+  function hattimCelebration() {
+    // A fresh celebration cancels the previous hide timer
+    if (celebrationHideTimer) clearTimeout(celebrationHideTimer);
     hattimReaction.classList.add('visible');
     hattimReactionVideo.currentTime = 0;
     hattimReactionVideo.play().catch(() => {});
     const done = () => hattimReaction.classList.remove('visible');
-    hattimReactionVideo.onended = done;
-    setTimeout(done, 4000);
+    // The clip is short (~2s) — hold the final frame briefly so it doesn't vanish abruptly
+    hattimReactionVideo.onended = () => { celebrationHideTimer = setTimeout(done, 600); };
+    celebrationHideTimer = setTimeout(done, 4000);
   }
 
   function playClick() {
@@ -1593,17 +1689,15 @@
     storyVideo.preload = 'auto';
     storyVideo.load();
     hideScreen(screenTap);
+    showScreen(screenMain); // instant cut — no blank-sky gap
 
     setTimeout(() => {
-      showScreen(screenMain);
+      wordmark.classList.add('drop-in');
       setTimeout(() => {
-        wordmark.classList.add('drop-in');
-        setTimeout(() => {
-          hattimIntroWrap.classList.add('visible');
-          hattimIntroVideo.play().catch(() => {});
-        }, 800);
-      }, 150);
-    }, 600);
+        hattimIntroWrap.classList.add('visible');
+        hattimIntroVideo.play().catch(() => {});
+      }, 800);
+    }, 150);
   }, { once: true });
 
   // Intro anim ends → show Start button, fade music
@@ -1629,12 +1723,9 @@
     playClick();
     warmAudio([gameplayMusic]);
     hideScreen(screenMain);
-
-    setTimeout(() => {
-      showScreen(screenVideo);
-      storyVideo.currentTime = 0;
-      storyVideo.play().catch(() => {});
-    }, 500);
+    showScreen(screenVideo); // instant cut
+    storyVideo.currentTime = 0;
+    storyVideo.play().catch(() => {});
   });
 
   // Video starts → show skip button
@@ -1665,29 +1756,26 @@
     btnSkip.classList.remove('visible');
     videoBtns.classList.remove('visible');
     hideScreen(screenVideo);
+    showScreen(screenLesson1); // instant cut
+    fadeIn(gameplayMusic, 0.35, 1500);
 
     setTimeout(() => {
-      showScreen(screenLesson1);
-      fadeIn(gameplayMusic, 0.35, 1500);
+      lessonWordart.classList.add('drop-in');
 
       setTimeout(() => {
-        lessonWordart.classList.add('drop-in');
+        hattimLessonWrap.classList.add('visible');
+        hattimWaveVideo.play().catch(() => {});
 
         setTimeout(() => {
-          hattimLessonWrap.classList.add('visible');
-          hattimWaveVideo.play().catch(() => {});
+          btnLesson.classList.add('visible');
 
-          setTimeout(() => {
-            btnLesson.classList.add('visible');
+          handTimer = setTimeout(() => {
+            handHint.classList.add('visible');
+          }, 12000);
 
-            handTimer = setTimeout(() => {
-              handHint.classList.add('visible');
-            }, 12000);
-
-          }, 800);
-        }, 700);
-      }, 200);
-    }, 500);
+        }, 800);
+      }, 700);
+    }, 200);
   }
 
   btnSkip.addEventListener('click', goToLesson1);
@@ -1706,21 +1794,18 @@
     storyVideo.pause();
     hideScreen(screenVideo);
     hideScreen(screenLesson1);
+    showScreen(screenFriends); // instant cut
+    hattimIdleWrap.classList.add('visible');
+    hattimIdleVideo.play().catch(() => {});
 
     setTimeout(() => {
-      showScreen(screenFriends);
-      hattimIdleWrap.classList.add('visible');
-      hattimIdleVideo.play().catch(() => {});
-
+      friendsQuestion.classList.add('visible');
       setTimeout(() => {
-        friendsQuestion.classList.add('visible');
-        setTimeout(() => {
-          playVoice(voiceFriends, () => {
-            btnFriends.classList.add('visible');
-          });
-        }, 200);
-      }, 300);
-    }, 500);
+        playVoice(voiceFriends, () => {
+          btnFriends.classList.add('visible');
+        });
+      }, 200);
+    }, 300);
   });
 
   // Friends button — swap to thumbsup animation
@@ -1747,9 +1832,9 @@
   btnPlay.addEventListener('click', () => {
     playClick();
     warmAudio([voiceRemember, voiceAmarB, voiceNaamB, voiceHattimB]);
-    hideScreen(screenFriends);
+    hideScreen(screenFriends, 'iris');
     setTimeout(() => {
-      showScreen(screenSentence);
+      showScreen(screenSentence, 'iris');
       setTimeout(startSentenceDemo, 400);
     }, 500);
   });
@@ -1761,6 +1846,10 @@
       el.classList.toggle('active',   i === index);
       el.classList.toggle('inactive', i !== index);
     });
+    // Light sweep across the newly lit card
+    const litCard = document.getElementById(cards[index].id);
+    litCard.classList.add('shimmer');
+    setTimeout(() => litCard.classList.remove('shimmer'), 900);
     poseImg.classList.add('fading');
     setTimeout(() => {
       poseImg.src = cards[index].img;
@@ -1834,11 +1923,9 @@
       onEnd: () => {
         setTimeout(() => {
           hideScreen(screenSentence);
-          setTimeout(() => {
-            showScreen(screen7);
-            startScreen7();
-          }, 750);
-        }, 1200);
+          showScreen(screen7); // instant cut
+          startScreen7();
+        }, 500);
       }
     });
   }
@@ -1861,13 +1948,12 @@
       onEnd: () => {
         document.getElementById('word-cards-row-9').style.opacity = '0';
         centerPoseImg9.style.opacity = '0';
+        // 700ms lets the 0.6s card fade finish, then cut straight to screen 10
         setTimeout(() => {
           hideScreen(screen9);
-          setTimeout(() => {
-            showScreen(screen10);
-            startScreen10();
-          }, 750);
-        }, 1200);
+          showScreen(screen10); // instant cut
+          startScreen10();
+        }, 700);
       }
     });
   }
@@ -1931,8 +2017,8 @@
       poseEl: screen7Pose,
       labelEl: screen7Label,
       onEnd: () => {
-        hideScreen(screen7);
-        setTimeout(() => { showScreen(screen8); startScreen8(); }, 500);
+        hideScreen(screen7, 'iris');
+        setTimeout(() => { showScreen(screen8, 'iris'); startScreen8(); }, 500);
       }
     });
   }
@@ -1953,10 +2039,36 @@
       poseEl: screen10Pose,
       labelEl: screen10Label,
       onEnd: () => {
-        hideScreen(screen10);
-        setTimeout(() => { showScreen(screen11); startScreen11(); }, 750);
+        hideScreen(screen10, 'iris');
+        setTimeout(() => { showScreen(screen11, 'iris'); startScreen11(); }, 750);
       }
     });
+  }
+
+  // ── Character fitting: measured artwork boxes per PNG ──
+  // The character fills a different fraction of each file's canvas, so fixed
+  // sizing can't align them. Fractions measured from the actual pixels.
+  // ar = canvas width/height; top/bottom = transparent padding fractions.
+  const charBox = {
+    'hattim-my.png':        { ar: 1920 / 1080, top: 0.209, bottom: 0.189 },
+    'hattim-name-is.png':   { ar: 1.0,         top: 0.098, bottom: 0.155 },
+    'hattim-name-card.png': { ar: 1024 / 831,  top: 0.207, bottom: 0.188 },
+    'hattim-tomar.png':     { ar: 1.0,         top: 0.034, bottom: 0.110 },
+    'hattim-ki.png':        { ar: 1.0,         top: 0.112, bottom: 0.144 }
+  };
+
+  // Returns a transform that renders every character at the same visual height
+  // (targetFrac of the box) with feet on the box's bottom edge.
+  // Assumes object-fit: contain and transform-origin: center bottom.
+  function characterTransform(imgName, boxW, boxH, targetFrac = 0.88) {
+    const box = charBox[imgName];
+    if (!box) return '';
+    const rh = Math.min(boxH, boxW / box.ar);        // rendered canvas height
+    const letterboxGap = (boxH - rh) / 2;             // contain centers vertically
+    const charH = rh * (1 - box.top - box.bottom);    // character pixel height
+    const scale = (targetFrac * boxH) / charH;
+    const feetOffset = letterboxGap + rh * box.bottom; // feet above box bottom
+    return 'translateY(' + (feetOffset * scale).toFixed(1) + 'px) scale(' + scale.toFixed(3) + ')';
   }
 
   // ── Shared engine: choose & match game (screens 8 & 11) ──
@@ -2003,11 +2115,12 @@
       card.classList.add('wrong');
       sfxWrong.currentTime = 0;
       sfxWrong.play().catch(() => {});
+      // 950ms lets the red halo pulse out twice (0.45s x 2) before the ring returns
       setTimeout(() => {
         card.classList.remove('wrong');
         card.classList.add('glowing');
         onDone();
-      }, 800);
+      }, 950);
     }
 
     function fillCard(cardIndex, onDone) {
@@ -2019,6 +2132,9 @@
       }));
       const card = document.getElementById(d.id);
       card.classList.remove('glowing', 'wrong');
+      // Light sweep across the card as the character lands in it
+      card.classList.add('shimmer');
+      setTimeout(() => card.classList.remove('shimmer'), 900);
       playVoice(d.voice, onDone, 4000);
     }
 
@@ -2029,10 +2145,11 @@
         btn.innerHTML = '';
         const img = document.createElement('img');
         img.src = d.img;
-        img.style.transform = 'scale(' + d.scale + ')';
         img.style.transformOrigin = 'center bottom';
-        if (d.cover) img.style.objectFit = 'cover';
         btn.appendChild(img);
+        // Measured fit: equal visual height, feet on a shared baseline
+        const r = img.getBoundingClientRect();
+        img.style.transform = characterTransform(d.img, r.width, r.height);
         btn.setAttribute('aria-label', 'Choose ' + (d.word || 'card'));
         btn.dataset.charIndex = charIndex;
         btn.classList.remove('fading-out');
@@ -2063,11 +2180,10 @@
           });
         }, 350);
       } else {
-        // Wrong — shake the tapped choice, Hattim reacts, buttons lock during flash
+        // Wrong — shake the tapped choice, red pulse behind the card, buttons lock during flash
         locked = true;
         btn.classList.add('shake');
         setTimeout(() => btn.classList.remove('shake'), 500);
-        hattimWrongReaction();
         flashWrong(currentCardIndex, () => { locked = false; });
       }
     }
@@ -2106,6 +2222,8 @@
         runRound(gameRounds[0], () => {
           clearChoices();
           setTimeout(() => {
+            // All 3 words matched — Hattim celebrates as the completion sfx plays
+            hattimCelebration();
             playVoice(sfxComplete, () => {
               playVoice(cfg.mixVoice, () => {
                 // Clear card images for round 2
@@ -2115,6 +2233,8 @@
                   runRound(gameRounds[1], () => {
                     clearChoices();
                     setTimeout(() => {
+                      // Round 2 done — celebrate again with the praise voice
+                      hattimCelebration();
                       playVoice(cfg.praiseVoice, () => {
                         playVoice(cfg.endVoice, () => {
                           // Fade out cards, hand off to next screen
@@ -2153,9 +2273,9 @@
     praiseVoice: voiceGood,
     endVoice: voiceYourName,
     onEnd: () => {
-      hideScreen(screen8);
+      hideScreen(screen8, 'iris');
       setTimeout(() => {
-        showScreen(screen9);
+        showScreen(screen9, 'iris');
         startScreen9();
       }, 750);
     }
@@ -2187,9 +2307,9 @@
     praiseVoice: voiceGoodJob,
     endVoice: voiceIsntThatWonderful,
     onEnd: () => {
-      hideScreen(screen11);
+      hideScreen(screen11, 'iris');
       setTimeout(() => {
-        showScreen(screen12);
+        showScreen(screen12, 'iris');
         startScreen12();
       }, 750);
     }
@@ -2232,10 +2352,8 @@
   btnPlayAgain12.addEventListener('click', () => {
     playClick();
     hideScreen(screen12);
-    setTimeout(() => {
-      showScreen(screenSentence);
-      startSentenceDemo();
-    }, 750);
+    showScreen(screenSentence); // instant cut
+    startSentenceDemo();
   });
 
   btnNext12.addEventListener('click', () => {
