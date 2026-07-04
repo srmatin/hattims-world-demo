@@ -900,6 +900,85 @@
       transform: translateY(0);
     }
 
+    /* ── Romanised text under Bangla script (word/game card tags, recall labels) ── */
+    .word-card-tag,
+    .game-card-tag {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.25;
+      padding: 6px 20px;
+    }
+    .word-card-tag .roman,
+    .game-card-tag .roman {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.72em;
+      font-weight: 600;
+      opacity: 0.75;
+    }
+    .recall-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.3;
+    }
+    .recall-label .roman {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.6em;
+      font-weight: 600;
+      opacity: 0.75;
+    }
+
+    /* ── Lesson progress dots ── */
+    #lesson-progress {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 30;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    #lesson-progress.visible { opacity: 1; }
+    #lesson-progress .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.45);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      transition: background 0.3s ease, transform 0.3s var(--ease-out);
+    }
+    #lesson-progress .dot.done { background: var(--orange-400); }
+    #lesson-progress .dot.current {
+      background: var(--orange-400);
+      transform: scale(1.35);
+    }
+
+    /* ── Hattim cheer-up reaction (wrong answers) ── */
+    #hattim-reaction {
+      position: fixed;
+      bottom: 2vh;
+      right: 2vw;
+      width: clamp(220px, 26vw, 360px);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+      pointer-events: none;
+      z-index: 30;
+    }
+    #hattim-reaction.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #hattim-reaction video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
     /* ── Reduced motion: stop loops and movement, keep the fades that convey state ── */
     @media (prefers-reduced-motion: reduce) {
       .egg-wrap img,
@@ -1030,19 +1109,19 @@
         <div class="word-card-img-wrap">
           <img src="hattim-my.png" class="word-card-img" alt="">
         </div>
-        <div class="word-card-tag">আমার</div>
+        <div class="word-card-tag"><span class="bangla" lang="bn">আমার</span><span class="roman">amar</span></div>
       </div>
       <div class="word-card inactive" id="card-naam">
         <div class="word-card-img-wrap">
           <img src="hattim-name-is.png" class="word-card-img" alt="">
         </div>
-        <div class="word-card-tag">নাম</div>
+        <div class="word-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
       </div>
       <div class="word-card inactive" id="card-hattim">
         <div class="word-card-img-wrap">
           <img src="hattim-name-card.png" class="word-card-img" alt="">
         </div>
-        <div class="word-card-tag">হাটটিম</div>
+        <div class="word-card-tag"><span class="bangla" lang="bn">হাটটিম</span><span class="roman">Hattim</span></div>
       </div>
     </div>
 
@@ -1068,19 +1147,19 @@
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill-amar" src="" alt="">
         </div>
-        <div class="game-card-tag">আমার</div>
+        <div class="game-card-tag"><span class="bangla" lang="bn">আমার</span><span class="roman">amar</span></div>
       </div>
       <div class="game-card" id="gc-naam">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill-naam" src="" alt="">
         </div>
-        <div class="game-card-tag">নাম</div>
+        <div class="game-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
       </div>
       <div class="game-card" id="gc-hattim">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill-hattim" src="" alt="">
         </div>
-        <div class="game-card-tag">হাটটিম</div>
+        <div class="game-card-tag"><span class="bangla" lang="bn">হাটটিম</span><span class="roman">Hattim</span></div>
       </div>
     </div>
 
@@ -1105,19 +1184,19 @@
         <div class="word-card-img-wrap">
           <img src="hattim-tomar.png" class="word-card-img" alt="">
         </div>
-        <div class="word-card-tag">তোমার</div>
+        <div class="word-card-tag"><span class="bangla" lang="bn">তোমার</span><span class="roman">tomar</span></div>
       </div>
       <div class="word-card inactive" id="card9-naam">
         <div class="word-card-img-wrap">
           <img src="hattim-name-is.png" class="word-card-img" alt="">
         </div>
-        <div class="word-card-tag">নাম</div>
+        <div class="word-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
       </div>
       <div class="word-card inactive" id="card9-ki">
         <div class="word-card-img-wrap">
           <img src="hattim-ki.png" class="word-card-img" alt="">
         </div>
-        <div class="word-card-tag">কি</div>
+        <div class="word-card-tag"><span class="bangla" lang="bn">কি</span><span class="roman">ki</span></div>
       </div>
     </div>
 
@@ -1145,19 +1224,19 @@
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill11-tomar" src="" alt="">
         </div>
-        <div class="game-card-tag">তোমার</div>
+        <div class="game-card-tag"><span class="bangla" lang="bn">তোমার</span><span class="roman">tomar</span></div>
       </div>
       <div class="game-card" id="gc11-naam">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill11-naam" src="" alt="">
         </div>
-        <div class="game-card-tag">নাম</div>
+        <div class="game-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
       </div>
       <div class="game-card" id="gc11-ki">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill11-ki" src="" alt="">
         </div>
-        <div class="game-card-tag">কি</div>
+        <div class="game-card-tag"><span class="bangla" lang="bn">কি</span><span class="roman">ki</span></div>
       </div>
     </div>
 
@@ -1204,6 +1283,17 @@
       </button>
     </div>
   </div>
+
+<!-- Lesson progress dots (screens 6-11) -->
+<div id="lesson-progress" aria-hidden="true">
+  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+</div>
+
+<!-- Hattim cheer-up reaction on wrong answers -->
+<div id="hattim-reaction">
+  <video id="hattimReactionVideo" src="anim-cheerup.webm" muted playsinline preload="none"></video>
+</div>
 
 <!-- Audio -->
 <audio id="introMusic"    src="Music_2_kids.mp3" preload="auto"></audio>
@@ -1402,6 +1492,39 @@
         a.load();
       }
     });
+  }
+
+  // ── Lesson progress dots (screens 6-11) ──
+  const lessonProgress = document.getElementById('lesson-progress');
+  const progressDots   = [...lessonProgress.querySelectorAll('.dot')];
+
+  function setProgress(step) { // 1-based
+    lessonProgress.classList.add('visible');
+    progressDots.forEach((d, i) => {
+      d.classList.toggle('done',    i < step - 1);
+      d.classList.toggle('current', i === step - 1);
+    });
+  }
+
+  function hideProgress() {
+    lessonProgress.classList.remove('visible');
+  }
+
+  // ── Hattim cheer-up reaction on wrong answers (throttled) ──
+  const hattimReaction      = document.getElementById('hattim-reaction');
+  const hattimReactionVideo = document.getElementById('hattimReactionVideo');
+  let lastReactionAt = 0;
+
+  function hattimWrongReaction() {
+    const now = Date.now();
+    if (now - lastReactionAt < 8000) return;
+    lastReactionAt = now;
+    hattimReaction.classList.add('visible');
+    hattimReactionVideo.currentTime = 0;
+    hattimReactionVideo.play().catch(() => {});
+    const done = () => hattimReaction.classList.remove('visible');
+    hattimReactionVideo.onended = done;
+    setTimeout(done, 4000);
   }
 
   function playClick() {
@@ -1692,6 +1815,7 @@
 
   // Screen 6: Amar Naam Hattim
   function startSentenceDemo() {
+    setProgress(1);
     runWordCardsSequence({
       cards: demoCards,
       voices: cardVoices,
@@ -1714,6 +1838,7 @@
 
   // Screen 9: Tomar Naam Ki
   function startScreen9() {
+    setProgress(4);
     warmAudio([voiceOnceAgainThreeWords, voiceTomarB, voiceKiB]);
     document.getElementById('word-cards-row-9').style.opacity = '';
     centerPoseImg9.style.opacity = '';
@@ -1748,7 +1873,8 @@
     poseEl.style.transform = 'scale(' + poseData.scale + ')';
     poseEl.classList.add('visible');
     setTimeout(() => {
-      labelEl.textContent = poseData.label;
+      labelEl.innerHTML = '<span class="bangla" lang="bn">' + poseData.label + '</span>' +
+                          '<span class="roman">' + poseData.roman + '</span>';
       labelEl.classList.add('visible');
       playVoice(poseData.audio, () => {
         setTimeout(() => {
@@ -1780,13 +1906,18 @@
 
   // Screen 7: Amar Naam Hattim recall
   const screen7Poses = [
-    { img: 'hattim-my.png',        label: 'আমার',   scale: 1.3, audio: voiceAmarB   },
-    { img: 'hattim-name-is.png',   label: 'নাম',    scale: 1.0, audio: voiceNaamB   },
-    { img: 'hattim-name-card.png', label: 'হাটটিম', scale: 1.2, audio: voiceHattimB }
+    { img: 'hattim-my.png',        label: 'আমার',   roman: 'amar',   scale: 1.3, audio: voiceAmarB   },
+    { img: 'hattim-name-is.png',   label: 'নাম',    roman: 'naam',   scale: 1.0, audio: voiceNaamB   },
+    { img: 'hattim-name-card.png', label: 'হাটটিম', roman: 'Hattim', scale: 1.2, audio: voiceHattimB }
   ];
 
   function startScreen7() {
+    setProgress(2);
     warmAudio([voiceChoose, voiceMix, voiceGood, voiceYourName, sfxWrong]);
+    if (!hattimReactionVideo.dataset.warmed) {
+      hattimReactionVideo.dataset.warmed = '1';
+      hattimReactionVideo.load();
+    }
     runRecallSequence({
       introVoice: voiceRemember,
       poses: screen7Poses,
@@ -1801,12 +1932,13 @@
 
   // Screen 10: Tomar Naam Ki recall
   const screen10Poses = [
-    { img: 'hattim-tomar.png',   label: 'তোমার', scale: 1.0, audio: voiceTomarB },
-    { img: 'hattim-name-is.png', label: 'নাম',    scale: 1.0, audio: voiceNaamB  },
-    { img: 'hattim-ki.png',      label: 'কি',     scale: 1.0, audio: voiceKiB    }
+    { img: 'hattim-tomar.png',   label: 'তোমার', roman: 'tomar', scale: 1.0, audio: voiceTomarB },
+    { img: 'hattim-name-is.png', label: 'নাম',    roman: 'naam',  scale: 1.0, audio: voiceNaamB  },
+    { img: 'hattim-ki.png',      label: 'কি',     roman: 'ki',    scale: 1.0, audio: voiceKiB    }
   ];
 
   function startScreen10() {
+    setProgress(5);
     warmAudio([voiceJoinAgain, voiceAgainMix, voiceGoodJob, voiceIsntThatWonderful]);
     runRecallSequence({
       introVoice: voiceOnceAgainThreeWords,
@@ -1923,10 +2055,11 @@
           });
         }, 350);
       } else {
-        // Wrong — shake the tapped choice and briefly lock buttons during flash
+        // Wrong — shake the tapped choice, Hattim reacts, buttons lock during flash
         locked = true;
         btn.classList.add('shake');
         setTimeout(() => btn.classList.remove('shake'), 500);
+        hattimWrongReaction();
         flashWrong(currentCardIndex, () => { locked = false; });
       }
     }
@@ -2021,6 +2154,7 @@
   });
 
   function startScreen8() {
+    setProgress(3);
     warmAudio([voiceAgainThreeWords, voiceTomarYour, voiceKiWhat, voiceOneMoreTime, voiceYourTurnAgain]);
     game8.start();
   }
@@ -2054,6 +2188,7 @@
   });
 
   function startScreen11() {
+    setProgress(6);
     warmAudio([sfxStars, voiceAllTheStars]);
     game11.start();
   }
@@ -2062,6 +2197,7 @@
 
   // ── Screen 12: Level Complete ──
   function startScreen12() {
+    hideProgress();
     stars12.classList.remove('visible');
     hattimWaveWrap12.classList.remove('visible');
     levelCompletePill12.classList.remove('visible');
