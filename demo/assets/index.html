@@ -674,6 +674,24 @@
     }
     .recall-label.visible { opacity: 1; }
 
+    /* Magnetic zoom for the recall pose (screens 7 & 10) — springy in, quick out.
+       Each pose lands at its own end-scale via --pose-scale (set from JS). */
+    .recall-pose.zoom-in  { animation: poseZoomIn  0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .recall-pose.zoom-out { animation: poseZoomOut 0.4s cubic-bezier(0.5, 0, 0.75, 0)     forwards; }
+    @keyframes poseZoomIn {
+      0%   { transform: scale(0.2); opacity: 0; }
+      60%  { opacity: 1; }
+      100% { transform: scale(var(--pose-scale, 1)); opacity: 1; }
+    }
+    @keyframes poseZoomOut {
+      0%   { transform: scale(var(--pose-scale, 1)); opacity: 1; }
+      100% { transform: scale(0.2); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .recall-pose.zoom-in  { animation: none !important; opacity: 1; transform: scale(var(--pose-scale, 1)); }
+      .recall-pose.zoom-out { animation: none !important; opacity: 0; }
+    }
+
     /* ── Friends screen layout overrides ── */
     #hattimIdleWrap { width: min(74.4vw, 768px); }
     #btnFriends, #btnPlay { position: absolute; bottom: 14%; }
@@ -1098,6 +1116,190 @@
         box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 12px 36px 10px rgba(220,50,50,0.8);
       }
     }
+
+    /* ══════════════════════════════
+       FANCY WORD-CARD TREATMENT — Screens 6 & 9 (appended, non-destructive)
+       Character removed, larger centered cards, scripted ring→voice→rise→tilt,
+       shared glitter celebration, and magnetic zoom between rounds.
+    ══════════════════════════════ */
+
+    /* Remove the big character + English caption; centre the cards vertically */
+    #center-pose-wrap,
+    #center-pose-wrap-9,
+    #word-english-text { display: none; }
+
+    #screen-sentence,
+    #screen-9 {
+      justify-content: center;
+      padding-top: 0;
+    }
+
+    /* Larger cards, scoped to the two word-card screens only (game cards untouched) */
+    #screen-sentence .word-card,
+    #screen-9 .word-card {
+      width: clamp(160px, 26vw, 260px);
+      padding: 18px;
+      gap: 14px;
+    }
+    #screen-sentence .word-card-img-wrap,
+    #screen-9 .word-card-img-wrap { height: 180px; }
+    #screen-sentence .word-card-tag,
+    #screen-9 .word-card-tag { font-size: clamp(18px, 2.6vw, 26px); }
+
+    /* Row is a positioning context for the glitter overlay */
+    #word-cards-row,
+    #word-cards-row-9 { position: relative; }
+
+    /* Character lifts + settles with a springy overshoot (framer-motion feel); the
+       word tag fades in (no vertical move) in step with the lift */
+    #screen-sentence .word-card-img-wrap,
+    #screen-9 .word-card-img-wrap {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #screen-sentence .word-card-tag,
+    #screen-9 .word-card-tag {
+      transition: opacity 0.45s ease;
+    }
+
+    /* ── Gold ring ──
+       Instead of the shared sweeping arc, the active card's border is *traced* from the
+       top all the way around, then held complete. Park the shared sweep first. */
+    @property --ring-fill {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    .word-card.active::before { animation-play-state: paused; }
+    /* Thicker, glowing band so the traced border reads clearly outside the card
+       (word cards only — Screen 8's .game-card ring keeps its 6px band) */
+    .word-card.ringing::before,
+    .word-card.speaking::before {
+      inset: -10px;               /* RING THICKNESS — bigger negative = ring sits further out */
+      padding: 10px;              /* RING THICKNESS — keep this the same number as inset above */
+      border-radius: 28px;
+    }
+
+    /* While the ring shows, drop the card's warm glow so the traced border stays crisp
+       and uniform (the ring itself is the highlight) */
+    .word-card.ringing,
+    .word-card.speaking { box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
+
+    /* Uniform solid gold fills the whole border, leaving a complete, even ring */
+    .word-card.ringing::before,
+    .word-card.speaking::before {
+      background: conic-gradient(from 0deg,
+        #F9C923            0deg,
+        #F9C923            var(--ring-fill),
+        rgba(249,201,35,0) var(--ring-fill),
+        rgba(249,201,35,0) 360deg);
+    }
+    .word-card.ringing::before {
+      --ring-fill: 0deg;
+      animation: ringFill 1s linear forwards;   /* RING SPEED — time to trace the whole border */
+      animation-play-state: running;
+    }
+    /* Voice + tilt: the completed border holds as a clean, uniform bright-gold ring
+       (no leading-head notch) until the ring hands off */
+    .word-card.speaking::before {
+      --ring-fill: 360deg;
+      animation: none;
+      background: conic-gradient(#F9C923 0deg 360deg);
+    }
+    @keyframes ringFill { to { --ring-fill: 360deg; } }
+
+    /* Only the character lifts + scales (springy) while the word is spoken */
+    .word-card.rise .word-card-img-wrap { transform: translateY(-16px) scale(1.1); }
+
+    /* Word tag is hidden on the active card until the read, then fades in as the
+       character lifts, and stays visible through the voice + tilt */
+    .word-card.active .word-card-tag  { opacity: 0; }
+    .word-card.speaking .word-card-tag { opacity: 1; }
+
+    /* The card tilts, and the light-sweep glints across as it leans (tilt "causes" the
+       shimmer). Word-card-scoped shimmer override leaves Screen 8's .game-card shimmer
+       (index.html:772) untouched. */
+    .word-card.tilt { animation: cardTilt 0.9s var(--ease-out); }
+    .word-card.shimmer::after { animation: cardShimmer 0.9s ease-out 0.12s; }
+    @keyframes cardTilt {
+      0%   { transform: rotate(0deg); }
+      35%  { transform: rotate(-6deg); }
+      65%  { transform: rotate(3deg); }
+      85%  { transform: rotate(-1.2deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* ── Magic glitter celebration (all three cards light up together) ── */
+    .word-card.magic {
+      filter: none;
+      opacity: 1;
+      border-color: transparent;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 0 34px 8px rgba(249,201,35,0.85);
+      animation: magicGlow 1.4s ease-out;
+    }
+    @keyframes magicGlow {
+      0%   { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 0 0 0 rgba(249,201,35,0.9); }
+      45%  { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 0 40px 12px rgba(255,214,64,0.95); }
+      100% { box-shadow: 0 4px 18px rgba(0,0,0,0.12), 0 0 34px 8px rgba(249,201,35,0.85); }
+    }
+
+    /* Sparkle burst layered over the whole row */
+    .cards-row.magic::after {
+      content: '';
+      position: absolute;
+      inset: -36px;
+      z-index: 6;
+      pointer-events: none;
+      background-repeat: no-repeat;
+      background-image:
+        radial-gradient(circle, #FFF6C8 0 3px, transparent 4px),
+        radial-gradient(circle, #FFFFFF 0 2px, transparent 3px),
+        radial-gradient(circle, #F9C923 0 3px, transparent 4px),
+        radial-gradient(circle, #FFFFFF 0 2px, transparent 3px),
+        radial-gradient(circle, #FFF6C8 0 3px, transparent 4px),
+        radial-gradient(circle, #F9C923 0 2px, transparent 3px),
+        radial-gradient(circle, #FFFFFF 0 3px, transparent 4px),
+        radial-gradient(circle, #FFF6C8 0 2px, transparent 3px);
+      background-position:
+        8% 20%, 22% 72%, 40% 8%, 55% 88%,
+        68% 30%, 80% 66%, 92% 16%, 48% 50%;
+      animation: glitterBurst 1.4s ease-out forwards;
+    }
+    @keyframes glitterBurst {
+      0%   { opacity: 0; transform: scale(0.9); }
+      15%  { opacity: 1; }
+      70%  { opacity: 1; }
+      100% { opacity: 0; transform: scale(1.18); }
+    }
+
+    /* ── Magnetic zoom out / in for the whole row ── */
+    .cards-row.zoom-out {
+      animation: rowZoomOut 0.42s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+    }
+    .cards-row.zoom-in {
+      animation: rowZoomIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes rowZoomOut {
+      from { transform: scale(1);   opacity: 1; }
+      to   { transform: scale(0.18); opacity: 0; }
+    }
+    @keyframes rowZoomIn {
+      0%   { transform: scale(0.18); opacity: 0; }
+      55%  { opacity: 1; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    /* Respect reduced-motion: drop the flourishes, keep the flow working (JS is timer-driven) */
+    @media (prefers-reduced-motion: reduce) {
+      .word-card.ringing::before,
+      .word-card.speaking::before { animation: none !important; }
+      .word-card.rise .word-card-img-wrap { transform: none !important; }
+      .word-card.tilt,
+      .word-card.shimmer::after,
+      .word-card.magic,
+      .cards-row.magic::after { animation: none !important; }
+      .cards-row.zoom-out { animation: none !important; opacity: 0; }
+      .cards-row.zoom-in  { animation: none !important; opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
@@ -1510,7 +1712,7 @@
     document.getElementById('choice-2')
   ];
 
-  const cardVoices = [voiceAmar, voiceNaam, voiceHattim];
+  const cardVoices = [voiceAmarB, voiceNaamB, voiceHattimB];
 
   const screen9           = document.getElementById('screen-9');
   const sentence9Label    = document.getElementById('sentence9-label');
@@ -1530,11 +1732,12 @@
     { id: 'card9-ki',    img: 'hattim-ki.png',         centerHeight: '280px', centerScale: 'scale(1.0)' }
   ];
 
-  const cardVoices9 = [voiceTomarYour, voiceNaam, voiceKiWhat];
-
   const voiceOnceAgainThreeWords = document.getElementById('voiceOnceAgainThreeWords');
   const voiceTomarB              = document.getElementById('voiceTomarB');
   const voiceKiB                 = document.getElementById('voiceKiB');
+
+  // Card read-aloud voices use the clean -b takes (declared after voiceTomarB/voiceKiB)
+  const cardVoices9 = [voiceTomarB, voiceNaamB, voiceKiB];
   const voiceJoinAgain           = document.getElementById('voiceJoinAgain');
   const voiceAgainMix            = document.getElementById('voiceAgainMix');
   const voiceGoodJob             = document.getElementById('voiceGoodJob');
@@ -1790,7 +1993,7 @@
     if (handTimer) { clearTimeout(handTimer); handTimer = null; }
     handHint.classList.remove('visible');
     playClick();
-    warmAudio([voiceLessonIntro, voiceAmar, voiceNaam, voiceHattim, sfxComplete, voiceNowRepeat, voiceNextScreen]);
+    warmAudio([voiceLessonIntro, voiceAmarB, voiceNaamB, voiceHattimB, sfxComplete, sfxStars, voiceNowRepeat, voiceNextScreen]);
     storyVideo.pause();
     hideScreen(screenVideo);
     hideScreen(screenLesson1);
@@ -1839,70 +2042,121 @@
     }, 500);
   });
 
-  // ── Shared engine: word-cards demo sequence (screens 6 & 9) ──
-  function activateWordCard(cards, poseImg, index) {
-    cards.forEach((c, i) => {
-      const el = document.getElementById(c.id);
-      el.classList.toggle('active',   i === index);
-      el.classList.toggle('inactive', i !== index);
-    });
-    // Light sweep across the newly lit card
-    const litCard = document.getElementById(cards[index].id);
-    litCard.classList.add('shimmer');
-    setTimeout(() => litCard.classList.remove('shimmer'), 900);
-    poseImg.classList.add('fading');
-    setTimeout(() => {
-      poseImg.src = cards[index].img;
-      poseImg.style.height = cards[index].centerHeight;
-      poseImg.style.transform = cards[index].centerScale;
-      poseImg.classList.remove('fading');
-    }, 250);
-  }
+  // ── Shared engine: fancy word-cards demo sequence (screens 6 & 9) ──
+  // Timings tuned to the CSS animations of the same name.
+  const RING_MS = 1100; // must be ~100 more than the ring-speed in the CSS (1s = 1000)
+  const TILT_MS = 950;  // tilt + light-sweep after the voice
+  const GAP_MS  = 320;  // pause before the ring moves to the next card
+
+  const WC_STATES = ['active', 'inactive', 'ringing', 'speaking', 'rise', 'tilt', 'shimmer', 'magic'];
 
   function resetWordCards(cards) {
     cards.forEach(c => {
       const el = document.getElementById(c.id);
-      el.classList.remove('active');
+      el.classList.remove(...WC_STATES);
       el.classList.add('inactive');
     });
   }
 
-  function runWordCardRound(cards, voices, poseImg, onComplete) {
+  // Read one card: ring completes once → voice (ring keeps sweeping + inner rises)
+  // → tilt + light-sweep shimmer, then hand off.
+  function readWordCard(cards, voices, index, onDone) {
+    cards.forEach((c, i) => {
+      const el = document.getElementById(c.id);
+      el.classList.remove('ringing', 'speaking', 'rise', 'tilt', 'shimmer', 'magic');
+      el.classList.toggle('active',   i === index);
+      el.classList.toggle('inactive', i !== index);
+    });
+    const el = document.getElementById(cards[index].id);
+    el.classList.add('ringing');
+    setTimeout(() => {
+      el.classList.remove('ringing');
+      el.classList.add('speaking', 'rise'); // ring keeps sweeping; image + text lift
+      playVoice(voices[index], () => {
+        el.classList.remove('rise');          // inner content settles back down
+        el.classList.add('tilt', 'shimmer');  // card tilts → shimmer glints across
+        // Ring (`speaking`) stays until the next card takes over
+        setTimeout(() => {
+          el.classList.remove('tilt', 'shimmer');
+          onDone();
+        }, TILT_MS);
+      }, 5000);
+    }, RING_MS);
+  }
+
+  function runWordCardRound(cards, voices, onComplete) {
     let step = 0;
     function next() {
       if (step >= cards.length) { onComplete(); return; }
       const i = step;
       step++;
-      activateWordCard(cards, poseImg, i);
-      playVoice(voices[i], () => {
-        setTimeout(next, 1200);
-      }, 5000);
+      readWordCard(cards, voices, i, () => setTimeout(next, GAP_MS));
     }
     next();
   }
 
-  // Listen round → repeat round → hand off. cfg: cards, voices, poseImg,
-  // labelEl, introVoice, repeatVoice, endVoice, onEnd
+  // All three cards light up together with a sparkle burst + stars SFX.
+  function glitterCards(cards, rowEl, onDone) {
+    rowEl.classList.add('magic');
+    cards.forEach(c => {
+      const el = document.getElementById(c.id);
+      el.classList.remove('inactive', 'active', 'ringing', 'speaking', 'rise', 'tilt', 'shimmer');
+      el.classList.add('magic');
+    });
+    sfxStars.currentTime = 0;
+    sfxStars.play().catch(() => {});
+    setTimeout(() => {
+      rowEl.classList.remove('magic');
+      cards.forEach(c => document.getElementById(c.id).classList.remove('magic'));
+      onDone();
+    }, 1500);
+  }
+
+  function zoomOutRow(rowEl, onDone) {
+    rowEl.classList.remove('zoom-in');
+    rowEl.classList.add('zoom-out');
+    setTimeout(() => { if (onDone) onDone(); }, 440);
+  }
+
+  function zoomInRow(rowEl, onDone) {
+    rowEl.classList.remove('zoom-out');
+    rowEl.classList.add('zoom-in');
+    setTimeout(() => {
+      rowEl.classList.remove('zoom-in'); // back to the row's natural resting state
+      if (onDone) onDone();
+    }, 620);
+  }
+
+  // Listen round → glitter → magnetic zoom + repeat voice → repeat round →
+  // final zoom + closing voice → hand off. cfg: cards, voices, rowEl, labelEl,
+  // introVoice, repeatVoice, endVoice, onEnd
   function runWordCardsSequence(cfg) {
+    const rowEl = cfg.rowEl;
+    rowEl.classList.remove('zoom-out', 'zoom-in', 'magic');
     resetWordCards(cfg.cards);
     playVoice(cfg.introVoice, () => {
       cfg.labelEl.textContent = 'Listen how it is said';
       setTimeout(() => {
-        runWordCardRound(cfg.cards, cfg.voices, cfg.poseImg, () => {
-          resetWordCards(cfg.cards);
-          playVoice(sfxComplete, () => {
-            playVoice(cfg.repeatVoice, () => {
-              cfg.labelEl.textContent = 'Now repeat with me';
-              setTimeout(() => {
-                runWordCardRound(cfg.cards, cfg.voices, cfg.poseImg, () => {
-                  resetWordCards(cfg.cards);
-                  cfg.labelEl.textContent = '';
-                  playVoice(sfxComplete, () => {
-                    playVoice(cfg.endVoice, cfg.onEnd);
-                  });
-                });
-              }, 500);
+        runWordCardRound(cfg.cards, cfg.voices, () => {
+          // Round 1 done → glitter celebration
+          glitterCards(cfg.cards, rowEl, () => {
+            cfg.labelEl.textContent = 'Now repeat with me';
+            // Round-2 voice plays as the cards zoom out and back in
+            let voiceDone = false, zoomDone = false;
+            const startRound2 = () => {
+              if (!(voiceDone && zoomDone)) return;
+              runWordCardRound(cfg.cards, cfg.voices, () => {
+                // Round 2 done → final zoom-out + closing voice together → cut
+                cfg.labelEl.textContent = '';
+                zoomOutRow(rowEl, null);
+                playVoice(cfg.endVoice, cfg.onEnd);
+              });
+            };
+            zoomOutRow(rowEl, () => {
+              resetWordCards(cfg.cards);
+              zoomInRow(rowEl, () => { zoomDone = true; startRound2(); });
             });
+            playVoice(cfg.repeatVoice, () => { voiceDone = true; startRound2(); });
           });
         });
       }, 500);
@@ -1915,7 +2169,7 @@
     runWordCardsSequence({
       cards: demoCards,
       voices: cardVoices,
-      poseImg: centerPoseImg,
+      rowEl: document.getElementById('word-cards-row'),
       labelEl: sentenceLabel,
       introVoice: voiceLessonIntro,
       repeatVoice: voiceNowRepeat,
@@ -1933,27 +2187,23 @@
   // Screen 9: Tomar Naam Ki
   function startScreen9() {
     setProgress(4);
-    warmAudio([voiceOnceAgainThreeWords, voiceTomarB, voiceKiB]);
-    document.getElementById('word-cards-row-9').style.opacity = '';
-    centerPoseImg9.style.opacity = '';
+    warmAudio([voiceOnceAgainThreeWords, voiceTomarB, voiceNaamB, voiceKiB, sfxStars]);
     screen9EndOverlay.classList.remove('visible');
     runWordCardsSequence({
       cards: demoCards9,
       voices: cardVoices9,
-      poseImg: centerPoseImg9,
+      rowEl: document.getElementById('word-cards-row-9'),
       labelEl: sentence9Label,
       introVoice: voiceAgainThreeWords,
       repeatVoice: voiceOneMoreTime,
       endVoice: voiceYourTurnAgain,
       onEnd: () => {
-        document.getElementById('word-cards-row-9').style.opacity = '0';
-        centerPoseImg9.style.opacity = '0';
-        // 700ms lets the 0.6s card fade finish, then cut straight to screen 10
+        // Cards have already zoomed out; brief beat, then cut to screen 10
         setTimeout(() => {
           hideScreen(screen9);
           showScreen(screen10); // instant cut
           startScreen10();
-        }, 700);
+        }, 500);
       }
     });
   }
@@ -1961,39 +2211,43 @@
   screen9EndWipPill.addEventListener('click', () => { location.reload(); });
 
   // ── Shared engine: word recall sequence (screens 7 & 10) ──
+  // One pose: voice + magnetic zoom-in (springy) + text fade start together; the pose
+  // holds through the voice, a brief micro-hold, then magnetic zoom-out, then hand off.
   function showRecallPose(poseEl, labelEl, poseData, onDone) {
     poseEl.src = poseData.img;
-    poseEl.style.transform = 'scale(' + poseData.scale + ')';
-    poseEl.classList.add('visible');
-    setTimeout(() => {
-      labelEl.innerHTML = '<span class="bangla" lang="bn">' + poseData.label + '</span>' +
-                          '<span class="roman">' + poseData.roman + '</span>';
-      labelEl.classList.add('visible');
-      playVoice(poseData.audio, () => {
-        setTimeout(() => {
-          poseEl.classList.remove('visible');
-          labelEl.classList.remove('visible');
-          setTimeout(onDone, 600);
-        }, 800);
-      });
-    }, 300);
+    poseEl.style.setProperty('--pose-scale', poseData.scale);
+    labelEl.innerHTML = '<span class="bangla" lang="bn">' + poseData.label + '</span>' +
+                        '<span class="roman">' + poseData.roman + '</span>';
+    poseEl.classList.remove('zoom-out');
+    poseEl.classList.add('zoom-in');
+    labelEl.classList.add('visible');
+    playVoice(poseData.audio, () => {
+      setTimeout(() => {            // brief micro-hold after the word
+        poseEl.classList.remove('zoom-in');
+        poseEl.classList.add('zoom-out');
+        labelEl.classList.remove('visible');
+        setTimeout(onDone, 420);   // let the ~0.4s zoom-out finish
+      }, 250);
+    });
   }
 
-  // Intro voice → each pose in turn → hand off. cfg: introVoice, poses,
-  // poseEl, labelEl, onEnd
+  // Clean bg → intro voice → each pose (zoom in/voice/out) in turn → hand off.
+  // cfg: introVoice, poses, poseEl, labelEl, onEnd
   function runRecallSequence(cfg) {
+    cfg.poseEl.classList.remove('zoom-in', 'zoom-out'); // clean background, no pose
+    cfg.labelEl.classList.remove('visible');
     playVoice(cfg.introVoice, () => {
       setTimeout(() => {
         let step = 0;
         function nextPose() {
           if (step >= cfg.poses.length) {
-            setTimeout(cfg.onEnd, 800);
+            setTimeout(cfg.onEnd, 300);
             return;
           }
           showRecallPose(cfg.poseEl, cfg.labelEl, cfg.poses[step++], nextPose);
         }
         nextPose();
-      }, 500);
+      }, 300);
     });
   }
 
@@ -2283,7 +2537,7 @@
 
   function startScreen8() {
     setProgress(3);
-    warmAudio([voiceAgainThreeWords, voiceTomarYour, voiceKiWhat, voiceOneMoreTime, voiceYourTurnAgain]);
+    warmAudio([voiceAgainThreeWords, voiceTomarB, voiceNaamB, voiceKiB, sfxStars, voiceOneMoreTime, voiceYourTurnAgain]);
     game8.start();
   }
 
