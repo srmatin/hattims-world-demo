@@ -524,7 +524,7 @@
       justify-content: flex-start;
       padding-top: 6vh;
     }
-    /* Shared layout for recall/celebration screens (7, 10, 12): bg + centered */
+    /* Shared layout for recall/celebration screens (7, 10, 13): bg + centered */
     .recall-screen {
       background: url('gameplay_background_center.png') center/cover no-repeat;
     }
@@ -940,6 +940,41 @@
 
     .wip-pill:active { transform: scale(0.96); }
 
+    /* Tap-in-sequence: cards are the tap targets (screens 8 & 11) */
+    .game-card[role="button"] { cursor: pointer; }
+    .game-card[role="button"]:active { transform: scale(0.97); }
+    .game-card.shake { animation: cardShake 0.45s var(--ease-out); }
+    /* Inactive cards (not the current glowing one) are dimmed back */
+    .game-card.dim {
+      filter: brightness(0.68) saturate(0.9);
+      opacity: 0.72;
+      transition: filter 0.35s ease, opacity 0.35s ease;
+    }
+
+    /* ══════════════════════════════
+       SCREEN 12 — Wrap up (two rows of review cards)
+    ══════════════════════════════ */
+    /* Centre the heading + rows vertically so they clear the top progress dots */
+    #screen-12 { z-index: 18; justify-content: center; padding-top: 0; }
+    #review-rows {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 3vh, 32px);
+      align-items: center;
+    }
+    /* Smaller cards so both rows fit comfortably */
+    #screen-12 .game-card { width: clamp(120px, 18vw, 180px); }
+    #screen-12 .game-card-fill { height: clamp(96px, 15vh, 130px); }
+    /* Character lifts + scales (springy) as its card lights up, then settles */
+    #screen-12 .game-card.lit .game-card-fill {
+      animation: reviewLift 0.7s var(--ease-out);
+    }
+    @keyframes reviewLift {
+      0%   { transform: scale(1); }
+      45%  { transform: translateY(-16px) scale(1.12); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
     /* ══════════════════════════════
        SCREEN 9 — Tomar Naam Ki: Word Cards
     ══════════════════════════════ */
@@ -956,10 +991,10 @@
     #screen-11 { z-index: 17; }
 
     /* ══════════════════════════════
-       SCREEN 12 — Level Complete
+       SCREEN 13 — Level Complete
     ══════════════════════════════ */
-    #screen-12 { z-index: 18; }
-    #stars12 {
+    #screen-13 { z-index: 19; }
+    #stars13 {
       position: absolute;
       top: 38%;
       left: 50%;
@@ -971,15 +1006,15 @@
       z-index: 0;
       pointer-events: none;
     }
-    #stars12.visible {
+    #stars13.visible {
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
     }
-    #hattimWaveWrap12 {
+    #hattimWaveWrap13 {
       position: relative;
       z-index: 1;
     }
-    #level-complete-pill-12 {
+    #level-complete-pill-13 {
       margin-top: 2vh;
       opacity: 0;
       transform: translateY(16px);
@@ -988,7 +1023,7 @@
       cursor: default;
       z-index: 1;
     }
-    #level-complete-pill-12.visible {
+    #level-complete-pill-13.visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -1444,30 +1479,24 @@
   <div class="screen lesson-screen" id="screen-8">
 
     <div id="game-cards-row" class="cards-row">
-      <div class="game-card" id="gc-amar">
+      <div class="game-card" id="gc-amar" role="button" tabindex="0" data-slot="0" aria-label="Tap amar">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill-amar" src="" alt="">
         </div>
         <div class="game-card-tag"><span class="bangla" lang="bn">আমার</span><span class="roman">amar</span></div>
       </div>
-      <div class="game-card" id="gc-naam">
+      <div class="game-card" id="gc-naam" role="button" tabindex="0" data-slot="1" aria-label="Tap naam">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill-naam" src="" alt="">
         </div>
         <div class="game-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
       </div>
-      <div class="game-card" id="gc-hattim">
+      <div class="game-card" id="gc-hattim" role="button" tabindex="0" data-slot="2" aria-label="Tap Hattim">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill-hattim" src="" alt="">
         </div>
         <div class="game-card-tag"><span class="bangla" lang="bn">হাটটিম</span><span class="roman">Hattim</span></div>
       </div>
-    </div>
-
-    <div id="game-choices-row" class="choices-row">
-      <button class="choice-btn" id="choice-0"></button>
-      <button class="choice-btn" id="choice-1"></button>
-      <button class="choice-btn" id="choice-2"></button>
     </div>
 
     <div id="game-end-overlay" class="end-overlay">
@@ -1521,30 +1550,24 @@
   <div class="screen lesson-screen" id="screen-11">
 
     <div id="game-cards-row-11" class="cards-row">
-      <div class="game-card" id="gc11-tomar">
+      <div class="game-card" id="gc11-tomar" role="button" tabindex="0" data-slot="0" aria-label="Tap tomar">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill11-tomar" src="" alt="">
         </div>
         <div class="game-card-tag"><span class="bangla" lang="bn">তোমার</span><span class="roman">tomar</span></div>
       </div>
-      <div class="game-card" id="gc11-naam">
+      <div class="game-card" id="gc11-naam" role="button" tabindex="0" data-slot="1" aria-label="Tap naam">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill11-naam" src="" alt="">
         </div>
         <div class="game-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
       </div>
-      <div class="game-card" id="gc11-ki">
+      <div class="game-card" id="gc11-ki" role="button" tabindex="0" data-slot="2" aria-label="Tap ki">
         <div class="game-card-fill">
           <img class="game-card-fill-img" id="gcfill11-ki" src="" alt="">
         </div>
         <div class="game-card-tag"><span class="bangla" lang="bn">কি</span><span class="roman">ki</span></div>
       </div>
-    </div>
-
-    <div id="game-choices-row-11" class="choices-row">
-      <button class="choice-btn" id="choice11-0"></button>
-      <button class="choice-btn" id="choice11-1"></button>
-      <button class="choice-btn" id="choice11-2"></button>
     </div>
 
     <div id="screen11-end-overlay" class="end-overlay">
@@ -1553,20 +1576,55 @@
 
   </div>
 
-  <!-- ── SCREEN 12: Level Complete ── -->
-  <div class="screen recall-screen" id="screen-12">
-    <img id="stars12" src="stars-celebration.png" alt="">
+  <!-- ── SCREEN 12: Wrap up — review all six words ── -->
+  <div class="screen lesson-screen" id="screen-12">
+    <p id="review-label" class="sentence-narrator">Let's wrap up</p>
+    <div id="review-rows">
+      <div class="cards-row">
+        <div class="game-card dim" id="rv-amar">
+          <div class="game-card-fill"><img class="game-card-fill-img" src="" alt=""></div>
+          <div class="game-card-tag"><span class="bangla" lang="bn">আমার</span><span class="roman">amar</span></div>
+        </div>
+        <div class="game-card dim" id="rv-naam1">
+          <div class="game-card-fill"><img class="game-card-fill-img" src="" alt=""></div>
+          <div class="game-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
+        </div>
+        <div class="game-card dim" id="rv-hattim">
+          <div class="game-card-fill"><img class="game-card-fill-img" src="" alt=""></div>
+          <div class="game-card-tag"><span class="bangla" lang="bn">হাটটিম</span><span class="roman">Hattim</span></div>
+        </div>
+      </div>
+      <div class="cards-row">
+        <div class="game-card dim" id="rv-tomar">
+          <div class="game-card-fill"><img class="game-card-fill-img" src="" alt=""></div>
+          <div class="game-card-tag"><span class="bangla" lang="bn">তোমার</span><span class="roman">tomar</span></div>
+        </div>
+        <div class="game-card dim" id="rv-naam2">
+          <div class="game-card-fill"><img class="game-card-fill-img" src="" alt=""></div>
+          <div class="game-card-tag"><span class="bangla" lang="bn">নাম</span><span class="roman">naam</span></div>
+        </div>
+        <div class="game-card dim" id="rv-ki">
+          <div class="game-card-fill"><img class="game-card-fill-img" src="" alt=""></div>
+          <div class="game-card-tag"><span class="bangla" lang="bn">কি</span><span class="roman">ki</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div class="hattim-lesson-wrap" id="hattimWaveWrap12">
-      <video id="hattimWaveVideo12" src="Hattim_Wave.webm" muted playsinline loop preload="auto"></video>
+  <!-- ── SCREEN 13: Level Complete ── -->
+  <div class="screen recall-screen" id="screen-13">
+    <img id="stars13" src="stars-celebration.png" alt="">
+
+    <div class="hattim-lesson-wrap" id="hattimWaveWrap13">
+      <video id="hattimWaveVideo13" src="Hattim_Wave.webm" muted playsinline loop preload="auto"></video>
     </div>
 
-    <div class="pill-btn" id="level-complete-pill-12">
+    <div class="pill-btn" id="level-complete-pill-13">
       LEVEL COMPLETE
     </div>
 
-    <div id="screen12-btns" class="bottom-btns">
-      <button class="circle-btn" id="btnPlayAgain12">
+    <div id="screen13-btns" class="bottom-btns">
+      <button class="circle-btn" id="btnPlayAgain13">
         <div class="circle">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 5V2L8 6l4 4V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" fill="white"/>
@@ -1574,7 +1632,7 @@
         </div>
         <span class="lbl">Play Again</span>
       </button>
-      <button class="circle-btn" id="btnNext12">
+      <button class="circle-btn" id="btnNext13">
         <div class="circle">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z" fill="white"/>
@@ -1632,6 +1690,12 @@
 <audio id="voiceIsntThatWonderful"   src="voice-isnt-that-wonderful.mp3"    preload="none"></audio>
 <audio id="sfxStars"         src="sfx-stars.wav"          preload="none"></audio>
 <audio id="voiceAllTheStars" src="voice-all-the-stars.mp3" preload="none"></audio>
+<!-- Screen 12 wrap-up: short single-word review takes -->
+<audio id="voiceAmarS"   src="voice-amar-s.mp3"   preload="none"></audio>
+<audio id="voiceNaamS"   src="voice-naam-s.mp3"   preload="none"></audio>
+<audio id="voiceHattimS" src="voice-hattim-s.mp3" preload="none"></audio>
+<audio id="voiceTomarS"  src="voice-tomar-s.mp3"  preload="none"></audio>
+<audio id="voiceKiS"     src="voice-ki-s.mp3"     preload="none"></audio>
 
 <script>
   // ── Elements ──
@@ -1703,14 +1767,8 @@
   const sfxWrong      = document.getElementById('sfxWrong');
 
   const screen8         = document.getElementById('screen-8');
-  const gameChoicesRow  = document.getElementById('game-choices-row');
   const gameEndOverlay  = document.getElementById('game-end-overlay');
   const gameEndWipPill  = document.getElementById('game-end-wip-pill');
-  const choiceBtns      = [
-    document.getElementById('choice-0'),
-    document.getElementById('choice-1'),
-    document.getElementById('choice-2')
-  ];
 
   const cardVoices = [voiceAmarB, voiceNaamB, voiceHattimB];
 
@@ -1748,26 +1806,28 @@
   const screen10Label   = document.getElementById('screen10-label');
 
   const screen11           = document.getElementById('screen-11');
-  const gameChoicesRow11   = document.getElementById('game-choices-row-11');
   const screen11EndOverlay = document.getElementById('screen11-end-overlay');
   const screen11EndWipPill = document.getElementById('screen11-end-wip-pill');
-  const choiceBtns11       = [
-    document.getElementById('choice11-0'),
-    document.getElementById('choice11-1'),
-    document.getElementById('choice11-2')
-  ];
 
   const sfxStars          = document.getElementById('sfxStars');
   const voiceAllTheStars  = document.getElementById('voiceAllTheStars');
 
-  const screen12            = document.getElementById('screen-12');
-  const stars12              = document.getElementById('stars12');
-  const hattimWaveWrap12     = document.getElementById('hattimWaveWrap12');
-  const hattimWaveVideo12    = document.getElementById('hattimWaveVideo12');
-  const levelCompletePill12  = document.getElementById('level-complete-pill-12');
-  const screen12Btns         = document.getElementById('screen12-btns');
-  const btnPlayAgain12       = document.getElementById('btnPlayAgain12');
-  const btnNext12            = document.getElementById('btnNext12');
+  // Screen 12 wrap-up — short single-word review voices
+  const screen12   = document.getElementById('screen-12');
+  const voiceAmarS   = document.getElementById('voiceAmarS');
+  const voiceNaamS   = document.getElementById('voiceNaamS');
+  const voiceHattimS = document.getElementById('voiceHattimS');
+  const voiceTomarS  = document.getElementById('voiceTomarS');
+  const voiceKiS     = document.getElementById('voiceKiS');
+
+  const screen13            = document.getElementById('screen-13');
+  const stars13              = document.getElementById('stars13');
+  const hattimWaveWrap13     = document.getElementById('hattimWaveWrap13');
+  const hattimWaveVideo13    = document.getElementById('hattimWaveVideo13');
+  const levelCompletePill13  = document.getElementById('level-complete-pill-13');
+  const screen13Btns         = document.getElementById('screen13-btns');
+  const btnPlayAgain13       = document.getElementById('btnPlayAgain13');
+  const btnNext13            = document.getElementById('btnNext13');
 
   let handTimer = null;
 
@@ -2325,46 +2385,99 @@
     return 'translateY(' + (feetOffset * scale).toFixed(1) + 'px) scale(' + scale.toFixed(3) + ')';
   }
 
-  // ── Shared engine: choose & match game (screens 8 & 11) ──
-  // Round 1: in order [0,1,2]. Round 2: shuffled [1,2,0].
+  // ── Shared engine: tap-in-sequence game (screens 8 & 11) ──
+  // Cards are pre-filled with their characters; the child taps them in phrase
+  // order. The correct next card glows. Round 1 lays cards out in order [0,1,2];
+  // round 2 reshuffles their positions to [1,2,0] while the required tap order
+  // stays the phrase order — so the glow jumps across positions.
   const gameRounds = [[0, 1, 2], [1, 2, 0]];
 
-  // cfg: data, choiceBtns, choicesRow, cardsRowId, endOverlay,
+  // cfg: data, cards, cardsRowId, endOverlay,
   //      introVoice, mixVoice, praiseVoice, endVoice, onEnd
-  function createMatchGame(cfg) {
+  function createSequenceGame(cfg) {
     let locked = false;
     let roundActive = false;
-    let currentCardIndex = 0;
+    let seqIndex = 0;                 // position in the phrase order (0..n-1)
     let onRoundComplete = null;
 
-    // Listeners attached once; rounds just update state (no cloneNode hack)
-    cfg.choiceBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (!roundActive) return;
-        handleChoice(btn, parseInt(btn.dataset.charIndex));
+    const row = document.getElementById(cfg.cardsRowId);
+    // Cards are identity-stable: cardEls[i] is the card for cfg.data[i], and it
+    // keeps its own picture + tag for the whole screen. Rounds only reorder
+    // their POSITIONS in the row — they never swap contents between cards.
+    // cfg.cards arrives in DOM order, which matches cfg.data order.
+    const cardEls = cfg.cards;
+
+    // Listeners attached once; each card knows its own identity (data index)
+    cardEls.forEach((card, dataIndex) => {
+      card.addEventListener('click', () => handleTap(dataIndex));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTap(dataIndex); }
       });
     });
 
-    function resetCards() {
-      cfg.data.forEach(d => {
-        const card = document.getElementById(d.id);
-        card.classList.remove('glowing', 'wrong');
-        const img = document.getElementById(d.fillId);
+    // Fill each card once with its own character, sized inline per the data.
+    function fillAll() {
+      cardEls.forEach((card, i) => {
+        const d = cfg.data[i];
+        const img = card.querySelector('.game-card-fill-img');
         img.classList.remove('visible');
-        img.src = '';
+        img.src = d.img;
+        img.style.objectFit = d.cover ? 'cover' : 'contain';
+        img.style.transform = 'scale(' + d.scale + ')';
+        img.style.transformOrigin = 'center center';
+        requestAnimationFrame(() => requestAnimationFrame(() => img.classList.add('visible')));
       });
     }
 
-    function setCardGlow(cardIndex) {
-      cfg.data.forEach((d, i) => {
-        const card = document.getElementById(d.id);
-        card.classList.remove('glowing', 'wrong');
-        if (i === cardIndex) card.classList.add('glowing');
+    // Reorder the row so position i holds cardEls[layout[i]] (no animation).
+    function applyLayout(layout) {
+      layout.forEach(dataIndex => row.appendChild(cardEls[dataIndex]));
+    }
+
+    // FLIP: reorder to `layout`, then slide each card from its old spot to its
+    // new one like a shuffled deck. Cards go inactive (dim) during the move.
+    function shuffleTo(layout, onDone) {
+      const first = cardEls.map(c => c.getBoundingClientRect());
+      applyLayout(layout);
+      const last = cardEls.map(c => c.getBoundingClientRect());
+      cardEls.forEach((c, i) => {
+        c.classList.remove('glowing', 'wrong');
+        c.classList.add('dim');
+        c.style.transition = 'none';
+        c.style.transform = 'translateX(' + (first[i].left - last[i].left).toFixed(1) + 'px)';
+      });
+      void row.offsetWidth;            // reflow so the inverted start is committed
+      cardEls.forEach(c => {
+        c.style.transition = 'transform 0.6s var(--ease-in-out)';
+        c.style.transform = 'translateX(0)';
+      });
+      setTimeout(() => {
+        cardEls.forEach(c => { c.style.transition = ''; c.style.transform = ''; });
+        onDone();
+      }, 640);
+    }
+
+    // The expected card (seqIndex-th word) glows and is bright; the rest dim.
+    function glowExpected() {
+      cardEls.forEach((c, i) => {
+        c.classList.remove('wrong');
+        if (i === seqIndex) { c.classList.add('glowing'); c.classList.remove('dim'); }
+        else { c.classList.remove('glowing'); c.classList.add('dim'); }
       });
     }
 
-    function flashWrong(cardIndex, onDone) {
-      const card = document.getElementById(cfg.data[cardIndex].id);
+    // Drop all highlight/dim state (used during celebrations — every card bright).
+    function clearHighlights() {
+      cardEls.forEach(c => c.classList.remove('glowing', 'wrong', 'dim'));
+    }
+
+    function shimmerCard(card) {
+      card.classList.add('shimmer');
+      setTimeout(() => card.classList.remove('shimmer'), 900);
+    }
+
+    function flashWrong(onDone) {
+      const card = cardEls[seqIndex];   // the expected card
       card.classList.remove('glowing');
       card.classList.add('wrong');
       sfxWrong.currentTime = 0;
@@ -2377,128 +2490,84 @@
       }, 950);
     }
 
-    function fillCard(cardIndex, onDone) {
-      const d = cfg.data[cardIndex];
-      const img = document.getElementById(d.fillId);
-      img.src = d.img;
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        img.classList.add('visible');
-      }));
-      const card = document.getElementById(d.id);
-      card.classList.remove('glowing', 'wrong');
-      // Light sweep across the card as the character lands in it
-      card.classList.add('shimmer');
-      setTimeout(() => card.classList.remove('shimmer'), 900);
-      playVoice(d.voice, onDone, 4000);
-    }
+    function handleTap(dataIndex) {
+      if (!roundActive || locked) return;
+      const card = cardEls[dataIndex];
 
-    function renderChoices(choiceOrder) {
-      cfg.choiceBtns.forEach((btn, i) => {
-        const charIndex = choiceOrder[i];
-        const d = cfg.data[charIndex];
-        btn.innerHTML = '';
-        const img = document.createElement('img');
-        img.src = d.img;
-        img.style.transformOrigin = 'center bottom';
-        btn.appendChild(img);
-        // Measured fit: equal visual height, feet on a shared baseline
-        const r = img.getBoundingClientRect();
-        img.style.transform = characterTransform(d.img, r.width, r.height);
-        btn.setAttribute('aria-label', 'Choose ' + (d.word || 'card'));
-        btn.dataset.charIndex = charIndex;
-        btn.classList.remove('fading-out');
-        btn.disabled = false;
-        btn.style.opacity = '';
-        btn.style.transform = '';
-      });
-      cfg.choicesRow.classList.add('visible');
-    }
-
-    function handleChoice(btn, charIndex) {
-      if (locked) return;
-      if (charIndex === currentCardIndex) {
-        // Correct
+      if (dataIndex === seqIndex) {
+        // Correct — the next word in phrase order
         locked = true;
-        btn.classList.add('fading-out');
-        btn.disabled = true;
-        setTimeout(() => {
-          fillCard(currentCardIndex, () => {
-            locked = false;
-            currentCardIndex++;
-            if (currentCardIndex < cfg.data.length) {
-              setCardGlow(currentCardIndex);
-            } else {
-              roundActive = false;
-              onRoundComplete();
-            }
-          });
-        }, 350);
+        shimmerCard(card);
+        playVoice(cfg.data[dataIndex].voice, () => {
+          locked = false;
+          seqIndex++;
+          if (seqIndex < cfg.data.length) {
+            glowExpected();
+          } else {
+            roundActive = false;
+            onRoundComplete();
+          }
+        }, 4000);
+      } else if (dataIndex < seqIndex) {
+        // Already played — replay its word; glow stays put, no error
+        locked = true;
+        shimmerCard(card);
+        playVoice(cfg.data[dataIndex].voice, () => { locked = false; }, 4000);
       } else {
-        // Wrong — shake the tapped choice, red pulse behind the card, buttons lock during flash
+        // Not yet reached — wrong: shake the tapped card, red-pulse the expected card
         locked = true;
-        btn.classList.add('shake');
-        setTimeout(() => btn.classList.remove('shake'), 500);
-        flashWrong(currentCardIndex, () => { locked = false; });
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 500);
+        flashWrong(() => { locked = false; });
       }
     }
 
-    function runRound(choiceOrder, onComplete) {
-      renderChoices(choiceOrder);
-      currentCardIndex = 0;
+    function beginRound(onComplete) {
+      seqIndex = 0;
       onRoundComplete = onComplete;
       locked = false;
       roundActive = true;
-      setCardGlow(currentCardIndex);
-    }
-
-    function clearChoices() {
-      cfg.choiceBtns.forEach(btn => {
-        btn.classList.add('fading-out');
-        btn.disabled = true;
-      });
-      setTimeout(() => {
-        cfg.choicesRow.classList.remove('visible');
-        cfg.choiceBtns.forEach(btn => {
-          btn.classList.remove('fading-out');
-          btn.innerHTML = '';
-        });
-      }, 450);
+      glowExpected();
     }
 
     function start() {
-      resetCards();
-      document.getElementById(cfg.cardsRowId).style.opacity = '';
-      cfg.choicesRow.classList.remove('visible');
+      roundActive = false;
+      cardEls.forEach(c => {
+        c.classList.remove('glowing', 'wrong', 'shimmer', 'dim', 'shake');
+        c.style.transition = '';
+        c.style.transform = '';
+      });
+      applyLayout(gameRounds[0]);       // restore phrase order (matters on replay)
+      row.style.opacity = '';
       cfg.endOverlay.classList.remove('visible');
+      fillAll();
 
       playVoice(cfg.introVoice, () => {
-        // Round 1 — in order
-        runRound(gameRounds[0], () => {
-          clearChoices();
+        // Round 1 — cards already in phrase order
+        beginRound(() => {
+          clearHighlights();
           setTimeout(() => {
-            // All 3 words matched — Hattim celebrates as the completion sfx plays
+            // All 3 words tapped — Hattim celebrates as the completion sfx plays
             hattimCelebration();
             playVoice(sfxComplete, () => {
               playVoice(cfg.mixVoice, () => {
-                // Clear card images for round 2
-                resetCards();
-                setTimeout(() => {
-                  // Round 2 — shuffled order
-                  runRound(gameRounds[1], () => {
-                    clearChoices();
+                // Shuffle the deck into round-2 positions, then play round 2
+                shuffleTo(gameRounds[1], () => {
+                  beginRound(() => {
+                    clearHighlights();
                     setTimeout(() => {
                       // Round 2 done — celebrate again with the praise voice
                       hattimCelebration();
                       playVoice(cfg.praiseVoice, () => {
                         playVoice(cfg.endVoice, () => {
                           // Fade out cards, hand off to next screen
-                          document.getElementById(cfg.cardsRowId).style.opacity = '0';
+                          row.style.opacity = '0';
                           setTimeout(cfg.onEnd, 700);
                         }, 4000);
                       }, 3000);
                     }, 400);
                   });
-                }, 500);
+                });
               }, 5000);
             });
           }, 400);
@@ -2516,10 +2585,9 @@
     { id: 'gc-hattim', fillId: 'gcfill-hattim', img: 'hattim-name-card.png', voice: voiceHattimB, scale: 1.2, cover: false, word: 'Hattim' }
   ];
 
-  const game8 = createMatchGame({
+  const game8 = createSequenceGame({
     data: gameData,
-    choiceBtns: choiceBtns,
-    choicesRow: gameChoicesRow,
+    cards: [...document.querySelectorAll('#game-cards-row .game-card')],
     cardsRowId: 'game-cards-row',
     endOverlay: gameEndOverlay,
     introVoice: voiceChoose,
@@ -2550,10 +2618,9 @@
     { id: 'gc11-ki',    fillId: 'gcfill11-ki',    img: 'hattim-ki.png',      voice: voiceKiB,    scale: 1.0, cover: false, word: 'ki'    }
   ];
 
-  const game11 = createMatchGame({
+  const game11 = createSequenceGame({
     data: gameData11,
-    choiceBtns: choiceBtns11,
-    choicesRow: gameChoicesRow11,
+    cards: [...document.querySelectorAll('#game-cards-row-11 .game-card')],
     cardsRowId: 'game-cards-row-11',
     endOverlay: screen11EndOverlay,
     introVoice: voiceJoinAgain,
@@ -2571,31 +2638,77 @@
 
   function startScreen11() {
     setProgress(6);
-    warmAudio([sfxStars, voiceAllTheStars]);
+    warmAudio([voiceAmarS, voiceNaamS, voiceHattimS, voiceTomarS, voiceKiS]);
     game11.start();
   }
 
   screen11EndWipPill.addEventListener('click', () => { location.reload(); });
 
-  // ── Screen 12: Level Complete ──
+  // ── Screen 12: Wrap up — replay all six taught words, lighting up each card ──
+  // Row 1 = Screen 8 words (amar, naam, Hattim); Row 2 = Screen 11 words (tomar, naam, ki).
+  const reviewData = [
+    { id: 'rv-amar',   img: 'hattim-my.png',        scale: 1.3, cover: true,  voice: voiceAmarS   },
+    { id: 'rv-naam1',  img: 'hattim-name-is.png',   scale: 1.0, cover: false, voice: voiceNaamS   },
+    { id: 'rv-hattim', img: 'hattim-name-card.png', scale: 1.2, cover: false, voice: voiceHattimS },
+    { id: 'rv-tomar',  img: 'hattim-tomar.png',     scale: 1.0, cover: false, voice: voiceTomarS  },
+    { id: 'rv-naam2',  img: 'hattim-name-is.png',   scale: 1.0, cover: false, voice: voiceNaamS   },
+    { id: 'rv-ki',     img: 'hattim-ki.png',        scale: 1.0, cover: false, voice: voiceKiS     }
+  ];
+
   function startScreen12() {
+    setProgress(7);                                  // all 6 dots done, none current
+    warmAudio([sfxStars, voiceAllTheStars]);         // buffer Level Complete audio
+    // Pre-fill every card with its character and dim them all
+    reviewData.forEach(d => {
+      const card = document.getElementById(d.id);
+      card.classList.add('dim');
+      card.classList.remove('lit');
+      const img = card.querySelector('.game-card-fill-img');
+      img.src = d.img;
+      img.style.objectFit = d.cover ? 'cover' : 'contain';
+      img.style.transform = 'scale(' + d.scale + ')';
+      img.style.transformOrigin = 'center center';
+      img.classList.add('visible');
+    });
+
+    let i = 0;
+    function next() {
+      if (i >= reviewData.length) {
+        setTimeout(() => {
+          hideScreen(screen12, 'iris');
+          setTimeout(() => { showScreen(screen13, 'iris'); startScreen13(); }, 750);
+        }, 600);
+        return;
+      }
+      const d = reviewData[i++];
+      const card = document.getElementById(d.id);
+      card.classList.remove('dim');   // light up (stays lit)
+      card.classList.add('lit');      // triggers the rise + scale
+      playVoice(d.voice, () => { setTimeout(next, 250); }, 3000);
+    }
+    // Let the screen settle after the iris wipe before the first light-up
+    setTimeout(next, 600);
+  }
+
+  // ── Screen 13: Level Complete ──
+  function startScreen13() {
     hideProgress();
-    stars12.classList.remove('visible');
-    hattimWaveWrap12.classList.remove('visible');
-    levelCompletePill12.classList.remove('visible');
-    screen12Btns.classList.remove('visible');
+    stars13.classList.remove('visible');
+    hattimWaveWrap13.classList.remove('visible');
+    levelCompletePill13.classList.remove('visible');
+    screen13Btns.classList.remove('visible');
 
     setTimeout(() => {
-      hattimWaveWrap12.classList.add('visible');
-      hattimWaveVideo12.play().catch(() => {});
+      hattimWaveWrap13.classList.add('visible');
+      hattimWaveVideo13.play().catch(() => {});
 
       setTimeout(() => {
-        stars12.classList.add('visible');
+        stars13.classList.add('visible');
         playVoice(sfxStars, () => {
           playVoice(voiceAllTheStars, () => {
-            levelCompletePill12.classList.add('visible');
+            levelCompletePill13.classList.add('visible');
             setTimeout(() => {
-              screen12Btns.classList.add('visible');
+              screen13Btns.classList.add('visible');
             }, 700);
           });
         });
@@ -2603,14 +2716,14 @@
     }, 300);
   }
 
-  btnPlayAgain12.addEventListener('click', () => {
+  btnPlayAgain13.addEventListener('click', () => {
     playClick();
-    hideScreen(screen12);
+    hideScreen(screen13);
     showScreen(screenSentence); // instant cut
     startSentenceDemo();
   });
 
-  btnNext12.addEventListener('click', () => {
+  btnNext13.addEventListener('click', () => {
     playClick();
     location.reload();
   });
