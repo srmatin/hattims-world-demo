@@ -5,7 +5,7 @@ A language learning game for kids, targeting iOS + Android. Currently in HTML de
 Brainstorming and ideation happens in Claude.ai. Demo iteration and app build happens here in Claude Code.
 
 ## Current State
-- **Master brief**: `research/master-brief.md` — read this first, every session. Single source of truth for the project.
+- **Master brief**: `research/master-brief/hattims-world-project-brief.md` — read this first, every session. Single source of truth for the project.
 - HTML demo: `demo/assets/index.html` — the reference UI. Use this as the design source of truth.
 - All demo assets (audio, video, images, animations): `demo/assets/`
 - Design system (brand rules, tokens, assets): `brand/design-system/`
@@ -13,10 +13,9 @@ Brainstorming and ideation happens in Claude.ai. Demo iteration and app build ha
 - Session notes from Claude.ai: `research/session-notes/`
 
 ## Brand & Design System
-Before any UI, copy, or visual work, read in this order:
-1. `brand/design-system/SKILL.md` — skill definition and usage instructions
-2. `brand/design-system/README.md` — full brand guidelines (colours, typography, tone, components)
-3. `brand/design-system/colors_and_type.css` — design tokens (use these exact values)
+The **hattims-world-design skill** (in `.claude/skills/`) auto-activates for UI/visual/copy work and covers the brand rules. Underlying files, if you need them directly:
+1. `brand/design-system/README.md` — full brand guidelines (colours, typography, tone, components)
+2. `brand/design-system/colors_and_type.css` — design tokens (use these exact values)
 
 Character poses: `brand/design-system/assets/hattim-*.png`
 Animations: `brand/design-system/assets/anim-*.webm`
@@ -31,10 +30,9 @@ Component previews: `brand/design-system/preview/` — reference only
 - When building the app, use `demo/` as the design spec and reference
 
 ## Critical Dev Rules (HTML demo phase)
-- **Never overwrite existing CSS blocks** — only append new rules
-- **Never touch earlier positioned elements** when adding new screens
+- Screens share three reusable JS engines (word cards, recall, sequence game). Add new lessons by adding config objects — don't copy-paste screen code.
+- Editing existing shared code is allowed (approved July 2026, supersedes the old append-only rule), but verify all screens still work end-to-end after changes.
 - One screen at a time — Sajid designs in Keynote, exports PNG, Claude builds from the PNG
-- New screens are appended to the existing HTML file; old screens are never modified
 
 ## Wiki Knowledge Base
 Path: /Users/sajidrizwanmatin/claude-obsidian
